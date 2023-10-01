@@ -1,26 +1,28 @@
+import Link from "next/link";
+
 const Footer = () => {
   return (
     <footer className="bg-gray-100 text-gray-600 py-4">
       <div className="container mx-auto text-center">
-        <p>&copy; 2023 Your App. All Rights Reserved.</p>
+        <p>&copy; 2023 Dua Collection. All Rights Reserved.</p>
         <div className="mt-4">
           {/* Social Media Links */}
-          <a
-            href="https://github.com/yourusername"
+          <Link
+            href="https://github.com/segullshairbutt"
             target="_blank"
             rel="noopener noreferrer"
             className="mr-4 text-gray-600 hover:text-gray-900"
           >
             GitHub
-          </a>
-          <a
-            href="https://linkedin.com/in/yourusername"
+          </Link>
+          <Link
+            href="https://linkedin.com/in/gulshairbutt"
             target="_blank"
             rel="noopener noreferrer"
             className="mr-4 text-gray-600 hover:text-gray-900"
           >
             LinkedIn
-          </a>
+          </Link>
           {/* Add more social media links as needed */}
         </div>
       </div>
