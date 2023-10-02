@@ -1,15 +1,17 @@
 import { FC } from "react";
+import { Amiri } from "next/font/google";
 
 import Dua from "components/Dua";
 
 import Duas from "./duas.json";
-import BackButton from "components/BackButton";
 
+
+const arabic_font = Amiri({ weight: "400", subsets: ["arabic"] })
 const MasnoonDuas: FC = () => {
   return (
     <div className="relative overflow-hidden pt-16 pb-32 space-y-24 min-h-[calc(100vh_-_156px)]">
       <section className="my-8 sm:my-10 grid grid-cols-1 gap-x-8 gap-y-4 p-6 mx-auto md:max-w-7xl">
-        <h1 className="font-bold text-center text-3xl leading-tight">
+        <h1 className={`font-bold text-center text-3xl leading-tight ${arabic_font.className}`}>
           ﷽
         </h1>
         {Duas.map((dua, index) => (
