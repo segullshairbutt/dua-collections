@@ -1,37 +1,31 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FC } from "react";
+import AlQuran from "components/AlQuran";
+import Hadith from "components/Hadith";
+import Section from "components/Section";
+
+import QuranIcon from "public/quran.webp";
+import HadithIcon from "public/hadith.webp";
 
 export default function Home() {
   return (
-    <div className="flex flex-wrap space-x-5 items-center justify-center">
-      <Button link="QuranDuas" text="Quranic Duas" imageUrl="/quran-icon.jpg" />
-      <Button link="MasnoonDuas" text="Masnoon Duas" imageUrl="hadith.png" />
+    <div className="relative overflow-hidden pt-16 pb-32 space-y-24 min-h-[calc(100vh_-_156px)]">
+      <Section
+        title="Quranic Duas"
+        image={QuranIcon}
+        description="A comprehensive list of all the Duas from the Quran with detailed explanations and translations of each Dua, you can deepen your understanding of the Quran and strengthen your connection with Allah."
+        link="/QuranDuas"
+        icon={
+          <AlQuran />
+        }
+      />
+      <Section
+        title="Masnoon Duas"
+        image={HadithIcon}
+        description="A comprehensive list of all the Duas from Hadith and Sunnah with detailed explanations and translations of each Dua, you can deepen your understanding of Islamic teachings and strengthen your connection with Allah and his Prophet (P.B.U.H)"
+        link="/MasnoonDuas"
+        icon={
+          <Hadith />
+        }
+      />
     </div>
-  );
+  )
 }
-
-interface ButtonProps {
-  link: string;
-  text: string;
-  imageUrl: string;
-}
-const Button: FC<ButtonProps> = ({ link, text, imageUrl }) => {
-  return (
-    <div className="transform hover:scale-105 transition-transform">
-      <Link href={link}>
-        <div className="flex flex-col items-center justify-center">
-          <button className="relative bg-transparent text-gray-800 hover:text-gray-900 border border-gray-300 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring focus:ring-opacity-50">
-            <div
-              className="w-64 h-32 bg-cover bg-center rounded-lg"
-              style={{
-                backgroundImage: 'url("' + imageUrl + '")',
-              }}
-            />
-            <p className="mt-2 text-center">{text}</p>
-          </button>
-        </div>
-      </Link>
-    </div>
-  );
-};
