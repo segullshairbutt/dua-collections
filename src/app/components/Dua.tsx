@@ -15,7 +15,7 @@ const arabic_font = Amiri_Quran({ weight: "400", subsets: ["arabic"] })
 const Dua = ({ category, content, referenceLink, tags, title, translation }: DuaCardProps) => {
     return (
         <div className="flex flex-col justify-center">
-            <div className="flex flex-col h-full bg-card dark:bg-card-dark shadow justify-between rounded-lg pb-8 p-6 xl:p-8 mt-3 bg-gray-50">
+            <div className="flex flex-col h-full bg-card shadow justify-between rounded-lg pb-8 p-6 xl:p-8 mt-3 bg-gray-50">
                 <div>
                     <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
                         {category}
