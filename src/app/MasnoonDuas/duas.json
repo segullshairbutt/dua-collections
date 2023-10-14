@@ -3,7 +3,7 @@
     "id": 1,
     "title": "Dua when waking up in the morning",
     "content": "الحَمْدُ لِلهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
-    "tags": ["Sunnah", "Dailylife", "Sleep"],
+    "tags": ["Sunnah", "Dailylife", "Sleep", "Wakeup"],
     "referenceLink": "https://sunnah.com/bukhari:6312",
     "translation": "ہم سے قبیصہ بن عقبہ نے بیان کیا ، کہا ہم سے سفیان ثوری نے بیان کیا ، ان سے عبدالملک بن عمیر نے ، ان سے ربعی بن حراش نے اور ان سے حضرت حذیفہ بن یمان رضی اللہ عنہ نے بیان کیاکہ نبی کریم صلی اللہ علیہ وسلم جب اپنے بستر پر لیٹتے تو یہ کہتے ” تیرے ہی نام کے ساتھ میں مردہ اور زندہ رہتا ہوں اور جب بیدار ہوتے تو کہتے اسی اللہ کے لئے تمام تعریفیں ہیں جس نے ہمیں زندہ کیا ۔ اس کے بعد کہ اس نے موت طاری کر دی تھی اور اسی کی طرف لوٹنا ہے ۔ قرآن شریف میں جو لفظ ننشزھا ہے اس کا بھی یہی معنی ہے کہ ہم اس کو نکال کر اٹھاتے ہیں ۔"
   },
@@ -14,5 +14,13 @@
     "tags": ["Sunnah", "Dailylife", "Sleep"],
     "referenceLink": "https://sunnah.com/abudawud:5060",
     "translation": "Ubadah b. al-Samit reported the Messenger of Allah (May peace be upon him) as saying; If anyone is alarmed while asleep and he says when awakes: \nThere is no god but Allah alone Who has no partner, to whom dominion belongs, to whom praise is due, and who has power over everything (omnipotent). Glory be to Allah, and praise be to Allah, and there is no god but Allah, and then he prays: O my Lord, forgive me. Abu Dawud said : Al-Walid’s version has; and he prays, his prayer will be answered. If he gets up, performs ablution, and prays, his prayer will be accepted."
+  },
+  {
+    "id": 3,
+    "title": "Dua when waking up in the morning",
+    "content": "الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي فِي جَسَدِي وَرَدَّ عَلَىَّ رُوحِي وَأَذِنَ لِي بِذِكْرِهِ",
+    "tags": ["Sunnah", "Dailylife", "Sleep", "Wakeup"],
+    "referenceLink": "https://sunnah.com/tirmidhi:3401",
+    "translation": "All praise is for Allah who restored to me my health and returned my soul and has allowed me to remember Him."
   }
 ]

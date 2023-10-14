@@ -1,10 +1,24 @@
 {
   "hosting": {
     "public": "out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "MasnoonDuas",
+        "destination": "/MasnoonDuas.html"
+      },
+      {
+        "source": "QuranDuas",
+        "destination": "/QuranDuas.html"
+      },
+      {
+        "source": "**",
+        "destination": "/404.html"
+      }
     ]
   }
 }
