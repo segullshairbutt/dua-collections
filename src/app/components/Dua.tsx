@@ -1,4 +1,7 @@
-import React from 'react';
+"use client"
+
+import { useLayoutEffect, useRef } from 'react';
+
 import Link from 'next/link';
 import { Amiri_Quran } from "next/font/google";
 
@@ -10,9 +13,24 @@ interface DuaCardProps {
     referenceLink: string;
     translation?: string;
 }
+const isArabic = (text: string) => {
+    const pattern = /[\u0600-\u06FF\u0750-\u077F]/;
+    return pattern.test(text);
+}
 
 const arabic_font = Amiri_Quran({ weight: "400", subsets: ["arabic"] })
 const Dua = ({ category, content, referenceLink, tags, title, translation }: DuaCardProps) => {
+
+    const duaRef = useRef<HTMLDivElement | null>(null);
+    useLayoutEffect(() => {
+        if (duaRef.current) {
+            const text = duaRef.current.innerText
+            if (text && isArabic(text)) {
+                duaRef.current.setAttribute("dir", 'rtl')
+            }
+        }
+    }, [])
+
     return (
         <div className="flex flex-col justify-center">
             <div className="flex flex-col h-full bg-card shadow justify-between rounded-lg pb-8 p-6 xl:p-8 mt-3 bg-gray-50">
@@ -20,12 +38,12 @@ const Dua = ({ category, content, referenceLink, tags, title, translation }: Dua
                     <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
                         {category}
                     </div>
-                    <h4 className="font-bold text-2xl mt-6 leading-tight">{title}</h4>
-                    <div className="mt-3 mb-6" dir='rtl'>
-                        <p className={`mb-5 text-xl !font-bold ${arabic_font.className}`}>{content}</p>
-                        <p>{translation}</p>
+                    <h4 className="font-bold sm:text-2xl text-xl mt-6 leading-tight">{title}</h4>
+                    <div className="mt-6 mb-6">
+                        <p className='mb-5 sm:text-xl text-base !font-bold text-end' style={arabic_font.style}>{content}</p>
+                        <p className='sm:text-base text-sm' ref={duaRef}>{translation}</p>
                     </div>
-                    <div className="flex flex-nowrap gap-2">
+                    <div className="flex flex-wrap gap-2">
                         {tags.map((tag, index) => (
                             <span key={index}
                                 className="inline-block bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full px-4 py-1 !text-xs font-semibold">

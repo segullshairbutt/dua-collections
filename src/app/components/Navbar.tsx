@@ -1,8 +1,10 @@
 "use client"
 
-import Link from 'next/link';
+import { useState } from 'react';
+
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react';
+import Link from 'next/link';
+
 import BackButton from './BackButton';
 
 const Navbar = () => {

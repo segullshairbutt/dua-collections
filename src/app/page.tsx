@@ -4,10 +4,11 @@ import Section from "components/Section";
 
 import QuranIcon from "public/quran.webp";
 import HadithIcon from "public/hadith.webp";
+import { Fragment } from "react";
 
 export default function Home() {
   return (
-    <div className="relative overflow-hidden pt-16 pb-32 space-y-24 min-h-[calc(100vh_-_156px)]">
+    <Fragment>
       <Section
         title="Quranic Duas"
         image={QuranIcon}
@@ -26,6 +27,6 @@ export default function Home() {
           <Hadith />
         }
       />
-    </div>
+    </Fragment>
   )
 }

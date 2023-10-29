@@ -1,6 +1,7 @@
+import { ReactElement } from 'react';
+
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
-import React, { ReactElement } from 'react';
 
 interface SectionProps {
     link: string;
