@@ -30,5 +30,21 @@
     "tags": ["Sunnah", "Dailylife", "Sleep", "Dream"],
     "referenceLink": "https://sunnah.com/bukhari:3292",
     "translation": "The Prophet (ﷺ) said, A good dream is from Allah, and a bad or evil dream is from Satan; so if anyone of you has a bad dream of which he gets afraid, he should spit on his left side and should seek Refuge with Allah from its evil, for then it will not harm him."
+  },
+  {
+    "id": 5,
+    "title": "Dua when putting a garment",
+    "content": "الحَمْدُ لِلهِ الَّذِي كَسَانِي هَذَا الثَّوْبَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+    "tags": ["Sunnah", "Dailylife", "Dress"],
+    "referenceLink": "https://sunnah.com/abudawud:4023",
+    "translation": "The Prophet (ﷺ) said: If anyone puts on a garment and says: \"Praise be to Allah Who has clothed me with this and provided me with it through no might and power on my part,\" he will be forgiven his former and later sins."
+  },
+  {
+    "id": 6,
+    "title": "Dua when eating the food",
+    "content": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا الطَّعَامَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلاَ قُوَّةٍ",
+    "tags": ["Sunnah", "Dailylife", "Food", "Eating"],
+    "referenceLink": "https://sunnah.com/abudawud:4023",
+    "translation": "The Prophet (ﷺ) said: If anyone eats food and then says: \"Praise be to Allah Who has fed me with this food and provided me with it through no might and power on my part,\" he will be forgiven his former and later sins."
   }
 ]
