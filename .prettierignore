@@ -1,0 +1,11 @@
+
+node_modules
+# Ignore artifacts:
+build
+out
+.next
+.firebase
+coverage
+dist
+public
+

@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-import Bismillah from "components/Bismillah";
-import Dua from "components/Dua";
+import Bismillah from 'components/Bismillah';
+import Dua from 'components/Dua';
 
-import Duas from "./duas.json";
+import Duas from './duas.json';
 
 const MasnoonDuas: FC = () => {
   return (
@@ -21,7 +21,7 @@ const MasnoonDuas: FC = () => {
         />
       ))}
     </section>
-  )
+  );
 };
 
 export default MasnoonDuas;
