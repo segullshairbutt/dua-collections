@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "prettier:fix": "prettier --write .",
     "lint": "next lint"
   },
   "dependencies": {
@@ -22,6 +23,8 @@
     "postcss": "latest",
     "tailwindcss": "latest",
     "eslint": "latest",
-    "eslint-config-next": "latest"
+    "eslint-config-next": "latest",
+    "@trivago/prettier-plugin-sort-imports": "latest",
+    "prettier": "latest"
   }
 }

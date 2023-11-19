@@ -1,31 +1,30 @@
-import AlQuran from "components/AlQuran";
-import Hadith from "components/Hadith";
-import Section from "components/Section";
+import { Fragment } from 'react';
 
-import QuranIcon from "public/quran.webp";
-import HadithIcon from "public/hadith.webp";
+import Section from 'components/Section';
+
+import HadithIcon from 'icons/HadithIcon';
+import QuranIcon from 'icons/QuranIcon';
+
+import Hadith from 'public/hadith.webp';
+import Quran from 'public/quran.webp';
 
 export default function Home() {
   return (
-    <div className="relative overflow-hidden pt-16 pb-32 space-y-24 min-h-[calc(100vh_-_156px)]">
+    <Fragment>
       <Section
         title="Quranic Duas"
-        image={QuranIcon}
+        image={Quran}
         description="A comprehensive list of all the Duas from the Quran with detailed explanations and translations of each Dua, you can deepen your understanding of the Quran and strengthen your connection with Allah."
         link="/QuranDuas"
-        icon={
-          <AlQuran />
-        }
+        icon={<QuranIcon />}
       />
       <Section
         title="Masnoon Duas"
-        image={HadithIcon}
+        image={Hadith}
         description="A comprehensive list of all the Duas from Hadith and Sunnah with detailed explanations and translations of each Dua, you can deepen your understanding of Islamic teachings and strengthen your connection with Allah and his Prophet (P.B.U.H)"
         link="/MasnoonDuas"
-        icon={
-          <Hadith />
-        }
+        icon={<HadithIcon />}
       />
-    </div>
-  )
+    </Fragment>
+  );
 }
