@@ -1,7 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with
-[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## About Dua collection
 
-## Getting Started
+This is a personal project to help remember the Masnoon and Quranic Duas at specific time frame. Normally, I push a new
+dua on weekly basis. In future, we will also introduce push notifications that will help us to schedule the Dua
+reminders at some specific time.
+
+## Contribution
+
+To contribute in this project, please raise an issue and create a PR for that. Nobody can push the code directly to the
+main branch. Your code will be reviewed, approved and after these steps can be merged.
+
+Moreover, feel free to raise the issues for adding new features in this application.
+
+## General workflow comments
+
+We are using firebase to deploy this application. So, whenever a PR is created. A preview hosting channel will be
+created automatically to preview your changes.
+
+Live application can be seen at: https://duas-collection.web.app/
+
+## Development notes
 
 First, run the development server:
 
@@ -31,11 +48,3 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions
 are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the
-[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
