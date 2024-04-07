@@ -15,14 +15,14 @@ export default function Home() {
         title="Quranic Duas"
         image={Quran}
         description="A comprehensive list of all the Duas from the Quran with detailed explanations and translations of each Dua, you can deepen your understanding of the Quran and strengthen your connection with Allah."
-        link="/QuranDuas"
+        href={{ pathname: 'Duas', query: { tag: 'Quran' } }}
         icon={<QuranIcon />}
       />
       <Section
         title="Masnoon Duas"
         image={Hadith}
         description="A comprehensive list of all the Duas from Hadith and Sunnah with detailed explanations and translations of each Dua, you can deepen your understanding of Islamic teachings and strengthen your connection with Allah and his Prophet (P.B.U.H)"
-        link="/MasnoonDuas"
+        href={{ pathname: '/Duas', query: { tag: 'Masnoon' } }}
         icon={<HadithIcon />}
       />
     </Fragment>

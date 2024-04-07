@@ -1,241 +1,257 @@
 [
   {
-    "id": 1,
+    "id": "q1",
+    "title": "Dua seeking guidance to straight path",
+    "content": "ٱلْحَمْدُ لِلهِ رَبِّ الْعَـٰلَمِينَ (٢) ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ (٣) مَـٰلِكِ يَوْمِ ٱلدِّينِ (٤) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (٥) ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ (٦) صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ (٧)",
+    "translation": "",
+    "tags": ["Quran", "Sunnah"],
+    "referenceLink": "https://quran.com/1"
+  },
+  {
+    "id": "q2",
+    "title": "Durood-o-Salam on Prophets and Hamad of Allah in one Dua",
+    "content": "سُبْحَـٰنَ رَبِّكَ رَبِّ ٱلْعِزَّةِ عَمَّا يَصِفُونَ (۱۸۰) وَسَلَـٰمٌ عَلَى ٱلْمُرْسَلِينَ (١٨١) وَٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ (١٨٢) ",
+    "translation": "(When you send Salam on me, send Salam on all the Messengers, for I am one of the Messengers.)\" This was recorded by Ibn Jarir and Ibn Abi Hatim. Abu Muhammad Al-Baghawi recorded in his Tafsir that Ali, may Allah be pleased with him, said: \"Whoever wants a greater measure of reward on the Day of Resurrection, let him say at the end of any gathering.",
+    "tags": ["Quran", "Sunnah"],
+    "referenceLink": "https://quran.com/37/180"
+  },
+  {
+    "id": "m1",
     "title": "Dua when waking up in the morning",
     "content": "الحَمْدُ لِلهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
-    "tags": ["Sunnah", "Dailylife", "Sleep", "Wakeup"],
+    "tags": ["Masnoon", "Sleep", "Wakeup"],
     "referenceLink": "https://sunnah.com/bukhari:6312",
     "translation": "ہم سے قبیصہ بن عقبہ نے بیان کیا ، کہا ہم سے سفیان ثوری نے بیان کیا ، ان سے عبدالملک بن عمیر نے ، ان سے ربعی بن حراش نے اور ان سے حضرت حذیفہ بن یمان رضی اللہ عنہ نے بیان کیاکہ نبی کریم صلی اللہ علیہ وسلم جب اپنے بستر پر لیٹتے تو یہ کہتے ” تیرے ہی نام کے ساتھ میں مردہ اور زندہ رہتا ہوں اور جب بیدار ہوتے تو کہتے اسی اللہ کے لئے تمام تعریفیں ہیں جس نے ہمیں زندہ کیا ۔ اس کے بعد کہ اس نے موت طاری کر دی تھی اور اسی کی طرف لوٹنا ہے ۔ قرآن شریف میں جو لفظ ننشزھا ہے اس کا بھی یہی معنی ہے کہ ہم اس کو نکال کر اٹھاتے ہیں ۔"
   },
   {
-    "id": 2,
+    "id": "m2",
     "title": "Dua if someone wakes up at night",
     "content": "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ ، سُبْحَانَ اللهِ وَالْحَمْدُ لِلهِ ، وَلَا إِلَهَ إِلَّا اللهُ وَاللهُ أَكْـبَرُ ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ الْعَلِيِّ الْعَظِيمِ رَبِّ اغْفِرْ لِي",
-    "tags": ["Sunnah", "Dailylife", "Sleep"],
+    "tags": ["Masnoon", "Sleep"],
     "referenceLink": "https://sunnah.com/abudawud:5060",
     "translation": "Ubadah b. al-Samit reported the Messenger of Allah (May peace be upon him) as saying; If anyone is alarmed while asleep and he says when awakes: \nThere is no god but Allah alone Who has no partner, to whom dominion belongs, to whom praise is due, and who has power over everything (omnipotent). Glory be to Allah, and praise be to Allah, and there is no god but Allah, and then he prays: O my Lord, forgive me. Abu Dawud said : Al-Walid’s version has; and he prays, his prayer will be answered. If he gets up, performs ablution, and prays, his prayer will be accepted."
   },
   {
-    "id": 3,
+    "id": "m3",
     "title": "Dua when waking up in the morning",
     "content": "الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي فِي جَسَدِي وَرَدَّ عَلَىَّ رُوحِي وَأَذِنَ لِي بِذِكْرِهِ",
-    "tags": ["Sunnah", "Dailylife", "Sleep", "Wakeup"],
+    "tags": ["Masnoon", "Sleep", "Wakeup"],
     "referenceLink": "https://sunnah.com/tirmidhi:3401",
     "translation": "All praise is for Allah who restored to me my health and returned my soul and has allowed me to remember Him."
   },
   {
-    "id": 4,
+    "id": "m4",
     "title": "Dua when seeing a bad dream",
     "content": "أَعُوذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
-    "tags": ["Sunnah", "Dailylife", "Sleep", "Dream"],
+    "tags": ["Masnoon", "Sleep", "Dream"],
     "referenceLink": "https://sunnah.com/bukhari:3292",
     "translation": "The Prophet (ﷺ) said, A good dream is from Allah, and a bad or evil dream is from Satan; so if anyone of you has a bad dream of which he gets afraid, he should spit on his left side and should seek Refuge with Allah from its evil, for then it will not harm him."
   },
   {
-    "id": 5,
+    "id": "m5",
     "title": "Dua when putting a garment",
     "content": "الحَمْدُ لِلهِ الَّذِي كَسَانِي هَذَا الثَّوْبَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
-    "tags": ["Sunnah", "Dailylife", "Dress"],
+    "tags": ["Masnoon", "Dress"],
     "referenceLink": "https://sunnah.com/abudawud:4023",
     "translation": "The Prophet (ﷺ) said: If anyone puts on a garment and says: \"Praise be to Allah Who has clothed me with this and provided me with it through no might and power on my part,\" he will be forgiven his former and later sins."
   },
   {
-    "id": 6,
+    "id": "m6",
     "title": "Dua when eating the food",
     "content": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا الطَّعَامَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلاَ قُوَّةٍ",
-    "tags": ["Sunnah", "Dailylife", "Food", "Eating"],
+    "tags": ["Masnoon", "Food", "Eating"],
     "referenceLink": "https://sunnah.com/abudawud:4023",
     "translation": "The Prophet (ﷺ) said: If anyone eats food and then says: \"Praise be to Allah Who has fed me with this food and provided me with it through no might and power on my part,\" he will be forgiven his former and later sins."
   },
   {
-    "id": 7,
+    "id": "m7",
     "title": "Dua before undressing",
     "content": "بِسمِ الله",
-    "tags": ["Sunnah", "Dailylife", "Dress"],
+    "tags": ["Masnoon", "Dress"],
     "referenceLink": "https://sunnah.com/tirmidhi:606",
     "translation": "Ali bin Abi Talid (may Allah be pleased with him) narrated that: \nThe Messenger of Allah said: \"The screen between the eyes of the jinns and nakedness of the children of Adam when one of you enters the area of relieving oneself is saying: 'Bismillah.'\""
   },
   {
-    "id": 8,
+    "id": "m8",
     "title": "Dua before entering the toilet",
     "content": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ",
-    "tags": ["Sunnah", "Dailylife", "Toilet"],
+    "tags": ["Masnoon", "Toilet"],
     "referenceLink": "https://sunnah.com/muslim:375a",
     "translation": "When the Messenger of Allah (ﷺ) entered the privy, and in the hadith transmitted by Hushaim (the words are): When the Messenger of Allah (ﷺ) entered the lavatory, be used to say: O Allah, I seek refuge in Thee from wicked and noxious things."
   },
   {
-    "id": 9,
+    "id": "m9",
     "title": "Dua after leaving the toilet",
     "content": "غُفْرَانَكَ",
-    "tags": ["Sunnah", "Dailylife", "Toilet"],
+    "tags": ["Masnoon", "Toilet"],
     "referenceLink": "https://sunnah.com/abudawud:30",
     "translation": "When the Prophet (ﷺ) came out of the privy, he used to say: \"Grant me Thy forgiveness.\""
   },
   {
-    "id": 10,
+    "id": "m10",
     "title": "Dua before starting Wudu",
     "content": "بِسْمِ اللهِ",
-    "tags": ["Sunnah", "Dailylife", "Wudu"],
+    "tags": ["Masnoon", "Wudu"],
     "referenceLink": "https://sunnah.com/ibnmajah:398",
     "translation": "It was narrated that Abu Sa'eed bin Zaid said:\"The Messenger of Allah said: 'There is no prayer for one who does not have ablution, and there is no ablution for one who does not mention the Name of Allah (before it).\""
   },
   {
-    "id": 10,
+    "id": "m10",
     "title": "Dua afer performing Wudu",
     "content": "أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ, ،اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ، وَاجْعَلْنِي مِنَ المُتَطَهِّرِينَ",
-    "tags": ["Sunnah", "Dailylife", "Wudu"],
+    "tags": ["Masnoon", "Wudu"],
     "referenceLink": "https://sunnah.com/tirmidhi:55",
     "translation": "Allah's Messenger said: Whoever performs Wudu, making Wudu well, then says: (\"Ashhadu an la ilaha illallah, wahdahu la sharika lahu, wa ashhadu anna Muhammadan-abduhu wa rasuluhu, Allahummajalni minat tawwabin, waj'alni minal mutatahhirin\") 'I testify that none has the right to be worshipped but Allah Alone, there are no partners for Him. And I testify that Muhammad is His servant and Messenger. O Allah! Make me among the repentant, and make me among those who purify themselves.' Then eight gates of Paradise are opened for him, that may enter by whichever of them wishes."
   },
   {
-    "id": 11,
+    "id": "m11",
     "title": "Dua before leaving the house",
     "content": "بِسْمِ اللهِ ، تَوَكَّلْتُ عَلَى اللهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ",
-    "tags": ["Sunnah", "Dailylife", "House"],
+    "tags": ["Masnoon", "House"],
     "referenceLink": "https://sunnah.com/abudawud:5095",
     "translation": "The Prophet (ﷺ) said: When a man goes out of his house and says: \"In the name of Allah, I trust in Allah; there is no might and no power but in Allah,\" the following will be said to him at that time: \"You are guided, defended and protected.\" The devils will go far from him and another devil will say: How can you deal with a man who has been guided, defended and protected?"
   },
   {
-    "id": 12,
+    "id": "m12",
     "title": "Dua before leaving the house",
     "content": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ أَنْ أَضِلَّ أَوْ أُضَلَّ أَوْ أَزِلَّ أَوْ أُزَلَّ أَوْ أَظْلِمَ أَوْ أُظْلَمَ أَوْ أَجْهَلَ أَوْ يُجْهَلَ عَلَىَّ",
-    "tags": ["Sunnah", "Dailylife", "House"],
+    "tags": ["Masnoon", "House"],
     "referenceLink": "https://sunnah.com/abudawud:5095",
     "translation": "The Messenger of Allah (ﷺ) never went out of my house without raising his eye to the sky and saying: \"O Allah! I seek refuge in Thee lest I stray or be led astray, or slip or made to slip, or cause injustice, or suffer injustice, or do wrong, or have wrong done to me.\""
   },
   {
-    "id": 13,
-    "title": "Dua when setting out for Masjid",
+    "id": "m13",
+    "title": "Dua when setting out for Mosque",
     "content": "اللَّهُمَّ اجْعَلْ فِي قَلْبِي نُورًا ، وَفِي لِسَانِي نُورًا ، وَاجْعَلْ فِي سَمْعِي نُورًا ، وَاجْعَلْ فِي بَصَرِي نُورًا ، وَاجْعَلْ مِنْ خَلْفِي نُورًا ، وَمِنْ أَمَامِي نُورًا ، وَاجْعَلْ مِنْ فَوْقِي نُورًا ، وَمِنْ تَحْتِي نُورًا ، اللَّهُمَّ أَعْطِنِي نُورًا",
-    "tags": ["Sunnah", "Dailylife", "Masjid"],
+    "tags": ["Masnoon", "Mosque"],
     "referenceLink": "https://sunnah.com/muslim:763l",
     "translation": "He spent (one night) in the house of the Messenger of Allah (ﷺ). He (the Holy Prophet) got up, brushed his teeth and performed ablution and said: \"In the creation of the heavens and the earth, and the alternation of the night and the day, there are indeed signs for people of understanding\" (al-Qur'an, iii. 190), to the end of the Surah. He then stood up and prayed two rak`ahs, standing, bowing and prostrating himself at length in them. Then he finished, went to sleep and snored. He did that three times, six rak`ahs altogether, each time cleaning his teeth, performing ablution, and reciting these verses. Then he observed three rak`ahs of Witr. The Mu'adhdhin then pronounced the Adhan and he went out for prayer and was saying: \"O Allah! place light in my heart, light in my tongue, place light in my hearing, place light in my eyesight, place light behind me, and light in front of me, and place light above me, and light below me. O Allah! grant me light.\""
   },
   {
-    "id": 14,
-    "title": "Dua when entering the Masjid",
+    "id": "m14",
+    "title": "Dua when entering the Mosque",
     "content": "أَعُوذُ بِاللَّهِ الْعَظِيمِ وَبِوَجْهِهِ الْكَرِيمِ وَسُلْطَانِهِ الْقَدِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
-    "tags": ["Sunnah", "Dailylife", "Masjid"],
+    "tags": ["Masnoon", "Mosque"],
     "referenceLink": "https://sunnah.com/abudawud:466",
     "translation": "I met ‘Uqbah b. Muslim and said to him: it has been reported to me that someone has narrated to you from the prophet (ﷺ) that when he entered the mosque, he would say: I seek refuge in Allah, the Magnificent, and in His noble face, and in his eternal domain, from the accursed Devil. He asked : is it so much only? I said: Yes. He said: when anyone says so. The devil says: he is protected from me all the day long."
   },
   {
-    "id": 15,
-    "title": "Dua when entering the Masjid",
+    "id": "m15",
+    "title": "Dua when entering the Mosque",
     "content": "السَّلامُ عَلَى رَسُولِ الله,اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
-    "tags": ["Sunnah", "Dailylife", "Masjid"],
+    "tags": ["Masnoon", "Mosque"],
     "referenceLink": "https://sunnah.com/abudawud:465",
     "translation": "Abu Usaid al-Ansari reported the Messenger of Allah (May peace be upon him) as saying: when any of you enters the mosque he should invoke blessing on the prophet (ﷺ) and then he should say: O Allah, open to me the gates of thy mercy."
   },
   {
-    "id": 16,
-    "title": "Dua when leaving the Masjid",
+    "id": "m16",
+    "title": "Dua when leaving the Mosque",
     "content": "السَّلامُ عَلَى رَسُولِ الله,اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
-    "tags": ["Sunnah", "Dailylife", "Masjid"],
+    "tags": ["Masnoon", "Mosque"],
     "referenceLink": "https://sunnah.com/abudawud:465",
     "translation": "Abu Usaid al-Ansari reported the Messenger of Allah (May peace be upon him) as saying: when any of you enters the mosque he should invoke blessing on the prophet (ﷺ) and then he should say: O Allah, open to me the gates of thy mercy."
   },
   {
-    "id": 18,
+    "id": "m18",
     "title": "Dua while hearing the Adhan",
     "content": "تَقُولُ اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ تَرْفَعُ بِهَا صَوْتَكَ ثُمَّ تَقُولُ أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ تَخْفِضُ بِهَا صَوْتَكَ ثُمَّ تَرْفَعُ صَوْتَكَ بِالشَّهَادَةِ أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ حَىَّ عَلَى الصَّلاَةِ حَىَّ عَلَى الصَّلاَةِ حَىَّ عَلَى الْفَلاَحِ حَىَّ عَلَى الْفَلاَحِ فَإِنْ كَانَ صَلاَةَ الصُّبْحِ قُلْتَ الصَّلاَةُ خَيْرٌ مِنَ النَّوْمِ الصَّلاَةُ خَيْرٌ مِنَ النَّوْمِ اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ لاَ إِلَهَ إِلاَّ اللَّهُ",
-    "tags": ["Sunnah", "Dailylife", "Adhan"],
+    "tags": ["Masnoon", "Adhan"],
     "referenceLink": "https://sunnah.com/abudawud:500",
     "translation": "Abu Mahdhurah reported; I said; Messenger of Allah, teach me the method of ADHAN (how to pronounce the call to prayer). He wiped my forehead (with his hand) and asked me to pronounce; Allah is most great. Allah is most great. Allah is most great. Allah is most great, raising your voice while saying them (these words). Then you must raise your voice in making the testimony: I testify that there is no god but Allah, I testify that there is no god but Allah; I testify that Muhammad is the Messenger of Allah, I testify that Muhammad is the Messenger of Allah. Lowering your voice while saying them (these words). Then you must raise your voice in making the testimony: I testify that there is no god but Allah, I testify there is no god but Allah; I testify Muhammad is the Messenger of Allah, I testify Muhammad is the Messenger of Allah. Come to prayer, come to prayer; come to salvation, come to salvation. If it is the morning prayer, you must pronounce; prayer is better than sleep, prayer is better than sleep, Allah is most great; there is no god but Allah."
   },
   {
-    "id": 19,
+    "id": "m19",
     "title": "Dua after hearing the Adhan 1",
     "content": "أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ رَضِيتُ بِاللَّهِ رَبًّا وَبِمُحَمَّدٍ رَسُولاً وَبِالإِسْلاَمِ دِينًا",
-    "tags": ["Sunnah", "Dailylife", "Adhan"],
+    "tags": ["Masnoon", "Adhan"],
     "referenceLink": "https://sunnah.com/abudawud:525",
     "translation": "Sa’d b. Abi Waqqas reported the Messenger of Allah (May peace be upon him) as saying: If anyone says when he hears the MU’ADHDHIN : “And I testify that there is no god but Allah alone who has no partner and that Muhammad is His servant and Apostle: I am satisfied with Allah as lord, with Muhammad as apostle and with Islam as religion”, he will be forgiven."
   },
   {
-    "id": 20,
+    "id": "m20",
     "title": "Dua after hearing the Adhan 2",
     "content": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ",
-    "tags": ["Sunnah", "Dailylife", "Adhan"],
+    "tags": ["Masnoon", "Adhan"],
     "referenceLink": "https://sunnah.com/bukhari/65",
     "translation": "Narrated Ka`b bin Ujra: It was said, \"O Allah's Messenger (ﷺ)! We know how to greet you, but how to invoke Allah for you?\" The Prophet said, \"Say: Allahumma salli ala Muhammadin wa'ala `Ali Muhammaddin, kama sallaita 'ala all Ibrahim, innaka Hamidun Majid.\""
   },
   {
-    "id": 20,
+    "id": "m20",
     "title": "Dua after hearing the Adhan 3",
     "content": " اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ وَالصَّلاَةِ الْقَائِمَةِ آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ",
-    "tags": ["Sunnah", "Dailylife", "Adhan"],
+    "tags": ["Masnoon", "Adhan"],
     "referenceLink": "https://sunnah.com/abudawud/2",
     "translation": "Jabir b. ‘Abd Allah reported the Messenger of Allah (ﷺ) as saying: if anyone says when he hears the call to prayer : “O Allah, Lord of this perfect call and of the prayer which is established for all time, grant Muhammad the wasilah and excellency, and raise him up in a praiseworthy position which Thou hast promised, he will be assured of my intercession."
   },
   {
-    "id": 21,
+    "id": "m21",
     "title": "Dua before sleeping",
     "content": "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",
-    "tags": ["Sunnah", "Dailylife", "Sleep"],
+    "tags": ["Masnoon", "Sleep"],
     "referenceLink": "https://sunnah.com/abudawud:5045",
     "translation": "When the Messenger of Allah (ﷺ) wanted to go to sleep, he put his right hand under his cheek and would then say three times: O Allah, guard me from Thy punishment on the day when Thou raisest up Thy servants."
   },
   {
-    "id": 22,
+    "id": "m22",
     "title": "Dua Qunoot (In Witar)",
     "content": "اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ وَعَافِنِي فِيمَنْ عَافَيْتَ وَتَوَلَّنِي فِيمَنْ تَوَلَّيْتَ وَبَارِكْ لِي فِيمَا أَعْطَيْتَ وَقِنِي شَرَّ مَا قَضَيْتَ إِنَّكَ تَقْضِي وَلاَ يُقْضَى عَلَيْكَ وَإِنَّهُ لاَ يَذِلُّ مَنْ وَالَيْتَ وَلاَ يَعِزُّ مَنْ عَادَيْتَ تَبَارَكْتَ رَبَّنَا وَتَعَالَيْتَ",
-    "tags": ["Sunnah", "Dailylife", "Prayer", "Witar"],
+    "tags": ["Masnoon", "Prayer", "Witar"],
     "referenceLink": "https://sunnah.com/abudawud:1425",
     "translation": "The Messenger of Allah (ﷺ) taught me some words that I say during the witr. (The version of Ibn Jawwas has: I say them in the supplication of the witr.) They were: \"O Allah, guide me among those Thou hast guided, grant me security among those Thou hast granted security, take me into Thy charge among those Thou hast taken into Thy charge, bless me in what Thou hast given, guard me from the evil of what Thou hast decreed, for Thou dost decree, and nothing is decreed for Thee. He whom Thou befriendest is not humbled. Blessed and Exalted art Thou, our Lord.\""
   },
   {
-    "id": 22,
+    "id": "m22",
     "title": "Dua afer witar prayer",
     "content": "سُبْحَانَ الْمَلِكِ الْقُدُّوسِ",
-    "tags": ["Sunnah", "Dailylife", "Prayer", "Witar"],
+    "tags": ["Masnoon", "Prayer", "Witar"],
     "referenceLink": "https://sunnah.com/nasai:1730",
     "translation": "Ubayy bin Ka'b said: \"The Messenger of Allah (ﷺ) used to recite in Witr: \"Glorify the Name of your Lord, the Most High;\" and \"Say: O you disbelievers!;' and 'Say: He is Allah, (the) One.'\""
   },
   {
-    "id": 23,
+    "id": "m23",
     "title": "Dua for anxiety and sorrow",
     "content": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ وَالْعَجْزِ وَالْكَسَلِ وَالْبُخْلِ وَالْجُبْنِ وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ",
-    "tags": ["Sunnah", "Dailylife", "Sorrow", "Anxiety"],
+    "tags": ["Masnoon", "Sorrow", "Anxiety"],
     "referenceLink": "https://sunnah.com/bukhari:2893",
     "translation": "Narrated Anas bin Malik: The Prophet (ﷺ) said to Abu Talha, \"Choose one of your boy servants to serve me in my expedition to Khaibar.\" So, Abu Talha took me letting me ride behind him while I was a boy nearing the age of puberty. I used to serve Allah's Messenger (ﷺ) when he stopped to rest. I heard him saying repeatedly, \"O Allah! I seek refuge with You from distress and sorrow, from helplessness and laziness, from miserliness and cowardice, from being heavily in debt and from being overcome by men.\""
   },
   {
-    "id": 24,
+    "id": "m24",
     "title": "Dua for distress",
     "content": "اللَّهُمَّ رَحْمَتَكَ أَرْجُو فَلاَ تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ وَأَصْلِحْ لِي شَأْنِي كُلَّهُ لاَ إِلَهَ إِلاَّ أَنْتَ",
-    "tags": ["Sunnah", "Dailylife", "Sorrow", "Distress"],
+    "tags": ["Masnoon", "Sorrow", "Distress"],
     "referenceLink": "https://sunnah.com/abudawud:5090",
     "translation": "Narrated Abubakrah: The Messenger of Allah (ﷺ) said: The supplications to be used by one who is distressed are: \"O Allah! Thy mercy is what I hope for. Do not abandon me to myself for an instant, but put all my affairs in good order for me. There is no god but Thou.\""
   },
   {
-    "id": 25,
+    "id": "m25",
     "title": "Dua when afflicted with doubt in faith",
     "content": "آمَنْتُ بِاللهِ وَرُسُلِهِ",
-    "tags": ["Sunnah", "Dailylife", "Danger", "Faith"],
+    "tags": ["Masnoon", "Danger", "Faith"],
     "referenceLink": "https://sunnah.com/muslim:134b",
     "translation": "It is narrated on the authority of Abu Huraira that the Messenger of Allah (ﷺ) said: Men will continue to question one another till this is propounded: Allah created all things but who created Allah? He who found himself confronted with such a situation should say: I affirm my faith in Allah."
   },
   {
-    "id": 26,
+    "id": "m26",
     "title": "Dua when afflicted with doubt in faith 2",
     "content": "هُوَ الأَوَّلُ وَالآخِرُ وَالظَّاهِرُ وَالْبَاطِنُ وَهُوَ بِكُلِّ شَىْءٍ عَلِيمٌ",
-    "tags": ["Sunnah", "Dailylife", "Danger", "Faith"],
+    "tags": ["Masnoon", "Danger", "Faith"],
     "referenceLink": "https://sunnah.com/muslim:134b",
     "translation": "Narrated Abdullah ibn Abbas: AbuZumayl said: I asked Ibn Abbas, saying: What is that I find in my breast? He asked: What is it? I replied: I swear by Allah, I cannot speak about it. He asked me: Is it something doubtful? and he laughed. He then said: No one could escape that, until Allah, the exalted, revealed: \"If thou went in doubt as to what we have revealed unto thee, and ask those who have been reading the Book from before thee.\" He said: If you find something in your heart, say: He is the first and the Last, the Evident and the Immanent, and He has full knowledge of all things."
   },
   {
-    "id": 27,
+    "id": "m27",
     "title": "Dua when afflicted by whisperings of the devil in prayer or recitation",
     "content": "أَعُوذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
-    "tags": ["Sunnah", "Dailylife", "Prayer", "Devil"],
+    "tags": ["Masnoon", "Prayer", "Devil"],
     "referenceLink": "https://sunnah.com/muslim:2203a",
     "translation": "Uthman b. Abu al-'As reported that he came to Allah's Messenger (ﷺ) and said: Allah's Messenger, the Satan intervenes between me and my prayer and my reciting of the Qur'an and he confounds me. Thereupon Allah's Messenger (ﷺ) said:, That is (the doing of a) Satan (devil) who is known as Khinzab, and when you perceive its effect, seek refuge with Allah from it and spit three times to your left. I did that and Allah dispelled that from me."
   },
   {
-    "id": 28,
+    "id": "m28",
     "title": "Dua when struck with a calamity or when unable to do something",
     "content": "قَدَرُ اللَّهِ وَمَا شَاءَ فَعَلَ",
-    "tags": ["Sunnah", "Calamity", "Devil"],
+    "tags": ["Masnoon", "Calamity", "Devil"],
     "referenceLink": "https://sunnah.com/muslim:2664",
     "translation": "Abu Huraira reported Allah's Messenger (ﷺ) as saying: A strong believer is better and is more lovable to Allah than a weak believer, and there is good in everyone, (but) cherish that which gives you benefit (in the Hereafter) and seek help from Allah and do not lose heart, and if anything (in the form of trouble) comes to you, don't say: If I had not done that, it would not have happened so and so, but say: Allah did that what He had ordained to do and your\" if\" opens the (gate) for the Satan."
   }

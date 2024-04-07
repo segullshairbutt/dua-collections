@@ -21,6 +21,7 @@ const isArabic = (text: string) => {
 const ArabicFont = Amiri_Quran({ weight: '400', subsets: ['arabic'] });
 const Dua = ({ category, content, referenceLink, tags, title, translation }: DuaCardProps) => {
   const duaRef = useRef<HTMLDivElement | null>(null);
+
   useLayoutEffect(() => {
     if (duaRef.current) {
       const text = duaRef.current.innerText;
@@ -46,12 +47,11 @@ const Dua = ({ category, content, referenceLink, tags, title, translation }: Dua
           </div>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="inline-block bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full px-4 py-1 !text-xs font-semibold"
-              >
-                {tag}
-              </span>
+              <Link key={index} href={{ query: { tag } }}>
+                <span className="inline-block bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full px-4 py-1 !text-xs font-semibold">
+                  {tag}
+                </span>
+              </Link>
             ))}
           </div>
         </div>

@@ -3,15 +3,17 @@ import { ReactElement } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 
+import { UrlObject } from 'url';
+
 interface SectionProps {
-  link: string;
+  href: UrlObject;
   title: string;
   description: string;
   icon: ReactElement;
   image: StaticImageData;
 }
 
-const Section = ({ description, icon, link, title, image }: SectionProps) => {
+const Section = ({ description, icon, href, title, image }: SectionProps) => {
   return (
     <div className="relative">
       <div className="md:mx-auto md:grid md:max-w-7xl md:grid-flow-col-dense md:grid-cols-2 md:gap-24 md:px-8">
@@ -29,7 +31,7 @@ const Section = ({ description, icon, link, title, image }: SectionProps) => {
               <div className="mt-6">
                 <Link
                   className="inline-flex rounded-lg bg-indigo-600 px-4 py-1.5 text-white font-semibold leading-7 shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
-                  href={link}
+                  href={href}
                 >
                   Read More
                 </Link>

@@ -3,16 +3,22 @@
 import { useState } from 'react';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import BackButton from './BackButton';
 
 const Navbar = () => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [navbar, setNavbar] = useState(false);
   const menu = [
-    { name: 'Quranic Duas', url: '/QuranDuas' },
-    { name: 'Masnoon Duas', url: '/MasnoonDuas' },
+    { name: 'All', url: { pathname: '/Duas' } },
+    { name: 'Quranic Duas', url: { pathname: '/Duas', query: { tag: 'Quran' } } },
+    { name: 'Masnoon Duas', url: { pathname: '/Duas', query: { tag: 'Masnoon' } } },
+    { name: 'Sleeping', url: { pathname: '/Duas', query: { tag: 'Sleep' } } },
+    { name: 'Mosque', url: { pathname: '/Duas', query: { tag: 'Mosque' } } },
+    { name: 'House', url: { pathname: '/Duas', query: { tag: 'House' } } },
   ];
 
   return (
@@ -61,7 +67,7 @@ const Navbar = () => {
           >
             <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0">
               {menu.map(({ name, url }, index) => {
-                const isActive = pathname === url;
+                const isActive = searchParams.get('tag') === url.query?.tag;
                 return (
                   <li
                     key={index}
