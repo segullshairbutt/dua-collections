@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, Suspense, useEffect, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -18,7 +18,7 @@ interface DuaObject {
   referenceLink: string;
 }
 
-const QuranDuas: FC = () => {
+const Duas: FC = () => {
   const searchParams = useSearchParams();
   const [duas, setDuas] = useState<DuaObject[]>([]);
 
@@ -54,4 +54,10 @@ const QuranDuas: FC = () => {
   );
 };
 
-export default QuranDuas;
+export default function DuasPage() {
+  return (
+    <Suspense>
+      <Duas />
+    </Suspense>
+  );
+}

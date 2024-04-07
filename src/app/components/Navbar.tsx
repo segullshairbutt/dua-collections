@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -93,4 +93,10 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default function NavbarComponent() {
+  return (
+    <Suspense>
+      <Navbar />
+    </Suspense>
+  );
+}
