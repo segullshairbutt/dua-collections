@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
@@ -23,9 +23,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        <div className="relative pt-16 pb-32 min-h-[calc(100vh_-_156px)]">{children}</div>
-        <Footer />
+        <Suspense fallback={<div className="text-center my-80"> Loading... </div>}>
+          <Navbar />
+          <div className="relative pt-16 pb-32 min-h-[calc(100vh_-_156px)]">{children}</div>
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );

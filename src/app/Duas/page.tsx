@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, Suspense, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -10,7 +10,7 @@ import Dua from 'components/Dua';
 
 import allDuas from 'duas.json';
 
-const Duas: FC = () => {
+const DuasPage = () => {
   const searchParams = useSearchParams();
   const duas = useMemo(() => {
     const tagFilter = searchParams.get('tag');
@@ -110,12 +110,6 @@ const Duas: FC = () => {
       ))}
     </section>
   );
-};
-
-export default function DuasPage() {
-  return (
-    <Suspense fallback={<div className="text-center my-80"> Loading... </div>}>
-      <Duas />
-    </Suspense>
-  );
 }
+
+export default DuasPage
