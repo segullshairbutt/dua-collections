@@ -10,7 +10,7 @@ import Quran from 'public/quran.webp';
 
 export default function Home() {
   return (
-    <Fragment>
+    <div className="space-y-24 overflow-x-hidden">
       <Section
         title="Quranic Duas"
         image={Quran}
@@ -25,6 +25,6 @@ export default function Home() {
         href={{ pathname: '/Duas', query: { tag: 'Masnoon' } }}
         icon={<HadithIcon />}
       />
-    </Fragment>
+    </div>
   );
 }

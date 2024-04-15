@@ -7,10 +7,10 @@ const BackButton = ({ className = '' }: { className?: string }) => {
   return (
     <button
       type="button"
-      className={`p-2 rounded-xl text-sm font-medium outline-none focus:outline-none border-4 border-transparent hover:text-gray-300 active:border-transparent active:text-grey-200 transition-all ${className}`}
+      className={`rounded-xl text-sm font-medium outline-none focus:outline-none border-4 border-transparent hover:text-gray-300 active:border-transparent active:text-grey-200 transition-all ${className}`}
       onClick={() => router.back()}
     >
-      <div className="flex flex-row align-middle w-8 h-8">
+      <i className="block h-6 w-6">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -25,7 +25,7 @@ const BackButton = ({ className = '' }: { className?: string }) => {
             <path d="M82,46H46c-1.1,0-2,0.9-2,2s0.9,2,2,2h36c1.1,0,2-0.9,2-2S83.1,46,82,46z" />
           </g>
         </svg>
-      </div>
+      </i>
     </button>
   );
 };

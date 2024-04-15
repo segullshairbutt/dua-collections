@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className={inter.className}>
         <Navbar />
-        <div className="relative overflow-hidden pt-16 pb-32 space-y-24 min-h-[calc(100vh_-_156px)]">{children}</div>
+        <div className="relative pt-16 pb-32 min-h-[calc(100vh_-_156px)]">{children}</div>
         <Footer />
       </body>
     </html>
