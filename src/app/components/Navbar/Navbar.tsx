@@ -19,9 +19,9 @@ const Navbar = () => {
   const toggleNavbar = useCallback(() => setNavbar(prev => !prev), []);
 
   const allCategories = useMemo(() => {
-    const tagsDisplayedInMenu = menu.reduce((acc: string[], qParams) => {
-      if (qParams.url.query && qParams.url.query.tag) {
-        acc.push(qParams.url.query.tag);
+    const tagsDisplayedInMenu = menu.reduce((acc: string[], current) => {
+      if (current.url.query && current.url.query.tag) {
+        acc.push(current.url.query.tag);
       }
       return acc;
     }, []);
