@@ -4,15 +4,15 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { usePathname, useSearchParams } from 'next/navigation';
 
-import allDuas from 'duas.json';
 import { Category } from '../Categories';
-import { menu } from './menu';
-import NavHeading from './NavHeading';
-import NavButton from './NavButton';
 import MenuLinks from './MenuLinks';
+import NavButton from './NavButton';
+import NavHeading from './NavHeading';
+import { menu } from './menu';
+
+import allDuas from 'duas.json';
 
 const Navbar = () => {
-
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [navbar, setNavbar] = useState(false);
@@ -26,9 +26,11 @@ const Navbar = () => {
       return acc;
     }, []);
 
-    return allDuas.flatMap(d => d.tags).filter((value, index, array) => {
-      return array.indexOf(value) === index && !tagsDisplayedInMenu.includes(value);
-    });
+    return allDuas
+      .flatMap(d => d.tags)
+      .filter((value, index, array) => {
+        return array.indexOf(value) === index && !tagsDisplayedInMenu.includes(value);
+      });
   }, []);
 
   return (
@@ -58,17 +60,15 @@ const Navbar = () => {
                 <div className="border-t-[.5px] my-3 border-gray-300/20" />
 
                 <ul className="flex flex-wrap items-center justify-start">
-                  {
-                    allCategories.map((tag, inx) => (
-                      <Category
-                        key={inx}
-                        tag={tag}
-                        activeClassName='text-indigo-100'
-                        isActive={tag === searchParams.get('tag')}
-                        onClick={toggleNavbar}
-                      />
-                    ))
-                  }
+                  {allCategories.map((tag, inx) => (
+                    <Category
+                      key={inx}
+                      tag={tag}
+                      activeClassName="text-indigo-100"
+                      isActive={tag === searchParams.get('tag')}
+                      onClick={toggleNavbar}
+                    />
+                  ))}
                 </ul>
               </div>
             </div>
@@ -89,5 +89,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-

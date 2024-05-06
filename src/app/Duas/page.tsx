@@ -41,6 +41,6 @@ const DuasPage = () => {
       ))}
     </section>
   );
-}
+};
 
-export default DuasPage
+export default DuasPage;
