@@ -8,7 +8,7 @@ import { Category } from '../Categories';
 import MenuLinks from './MenuLinks';
 import NavButton from './NavButton';
 import NavHeading from './NavHeading';
-import { menu } from './menu';
+import { TAGS_ROUTES } from './routes';
 
 import allDuas from 'duas.json';
 
@@ -19,7 +19,7 @@ const Navbar = () => {
   const toggleNavbar = useCallback(() => setNavbar(prev => !prev), []);
 
   const allCategories = useMemo(() => {
-    const tagsDisplayedInMenu = menu.reduce((acc: string[], current) => {
+    const tagsDisplayedInMenu = TAGS_ROUTES.reduce((acc: string[], current) => {
       if (current.url.query && current.url.query.tag) {
         acc.push(current.url.query.tag);
       }
@@ -60,9 +60,9 @@ const Navbar = () => {
                 <div className="border-t-[.5px] my-3 border-gray-300/20" />
 
                 <ul className="flex flex-wrap items-center justify-start">
-                  {allCategories.map((tag, inx) => (
+                  {allCategories.map((tag, index) => (
                     <Category
-                      key={inx}
+                      key={index}
                       tag={tag}
                       activeClassName="text-indigo-100"
                       isActive={tag === searchParams.get('tag')}

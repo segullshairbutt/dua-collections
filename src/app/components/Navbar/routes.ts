@@ -1,4 +1,4 @@
-export const menu = [
+export const TAGS_ROUTES = [
   { name: 'All', url: { pathname: '/Duas' } },
   { name: 'Quranic Duas', url: { pathname: '/Duas', query: { tag: 'Quran' } } },
   { name: 'Masnoon Duas', url: { pathname: '/Duas', query: { tag: 'Masnoon' } } },

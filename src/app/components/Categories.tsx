@@ -1,24 +1,15 @@
-import React, { MouseEventHandler, useMemo, useState } from 'react';
+import React, { FC, MouseEventHandler, useMemo, useState } from 'react';
 
 import Link from 'next/link';
 
-import allDuas from 'duas.json';
-
 interface CategoriesProps {
   tagParam?: string | null;
+  allTags: string[];
 }
 
-const Categories = ({ tagParam }: CategoriesProps) => {
+const Categories: FC<CategoriesProps> = ({ tagParam, allTags }) => {
   const [accordion, setAccordion] = useState(false);
   const toggleAccordion = () => setAccordion(prev => !prev);
-
-  const duaTags = useMemo(() => {
-    return allDuas
-      .flatMap(d => d.tags)
-      .filter((value, index, array) => {
-        return array.indexOf(value) === index;
-      });
-  }, []);
 
   return (
     <div className="sticky top-0 z-20 bg-gray-100 mb-0 shadow-sm mt-10 p-2">
@@ -57,8 +48,8 @@ const Categories = ({ tagParam }: CategoriesProps) => {
           aria-labelledby="accordion-collapse-heading-1"
         >
           <ul className="flex flex-wrap items-center justify-start">
-            {duaTags.map((tag, ix) => (
-              <Category key={ix} isActive={tag === tagParam} tag={tag} />
+            {allTags.map((tag, index) => (
+              <Category key={index} isActive={tag === tagParam} tag={tag} />
             ))}
           </ul>
         </div>

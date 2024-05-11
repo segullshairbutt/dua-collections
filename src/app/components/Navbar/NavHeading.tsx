@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import Link from 'next/link';
 
 import BackButton from 'components/BackButton';
 
-const NavHeading = ({ currentPath }: { currentPath: string }) => {
+interface NavHeadingProps {
+  currentPath: string;
+}
+
+const NavHeading: FC<NavHeadingProps> = ({ currentPath }) => {
   return (
     <div className="flex items-center gap-1">
       {currentPath !== '/' && <BackButton className="text-white" />}

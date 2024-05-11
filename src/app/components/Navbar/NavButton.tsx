@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-import { NavbarGeneralProps } from './interface';
-
-const NavButton = ({ toggle, navbar }: NavbarGeneralProps) => {
+interface NavButtonProps {
+  navbar?: boolean;
+  toggle: () => void;
+}
+const NavButton: FC<NavButtonProps> = ({ toggle, navbar }) => {
   return (
     <div className="md:hidden">
       <button className="text-gray-400 cursor-pointer hover:text-gray-500 relative z-50" onClick={toggle}>
