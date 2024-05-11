@@ -1,46 +1,38 @@
 'use client';
 
-import { FC, Suspense, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
 import Bismillah from 'components/Bismillah';
-import Dua from 'components/Dua';
+import Categories from 'components/Categories';
+import DuaCard from 'components/DuaCard';
 
-import allDuas from './duas.json';
+import allDuas from 'duas.json';
 
-interface DuaObject {
-  id: string;
-  title: string;
-  translation: string;
-  content: string;
-  tags: string[];
-  referenceLink: string;
-}
-
-const Duas: FC = () => {
+const DuasPage = () => {
   const searchParams = useSearchParams();
-  const [duas, setDuas] = useState<DuaObject[]>([]);
+  const tagFilter = searchParams.get('tag');
 
-  useEffect(() => {
-    const tagFilter = searchParams.get('tag');
-    if (tagFilter == null) {
-      setDuas(allDuas);
-      return;
-    }
+  const filteredDuas = useMemo(
+    () => (tagFilter == null ? allDuas : allDuas.filter(dua => dua.tags.includes(tagFilter))),
+    [tagFilter]
+  );
 
-    const _filteredDuas = allDuas.filter(dua => {
-      return dua.tags.includes(tagFilter);
-    });
-    setDuas(_filteredDuas);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  const duaTags = useMemo(() => {
+    return allDuas
+      .flatMap(d => d.tags)
+      .filter((value, index, array) => {
+        return array.indexOf(value) === index;
+      });
+  }, []);
 
   return (
-    <section className="my-8 sm:my-10 grid grid-cols-1 gap-x-8 gap-y-4 p-6 mx-auto md:max-w-7xl">
+    <section className="relative my-8 sm:my-10 grid grid-cols-1 gap-x-8 gap-y-4 p-6 mx-auto md:max-w-7xl">
       <Bismillah />
-      {duas.map((dua, index) => (
-        <Dua
+      <Categories allTags={duaTags} tagParam={tagFilter} />
+      {filteredDuas.map((dua, index) => (
+        <DuaCard
           key={index}
           title={dua.title}
           content={dua.content}
@@ -54,10 +46,4 @@ const Duas: FC = () => {
   );
 };
 
-export default function DuasPage() {
-  return (
-    <Suspense>
-      <Duas />
-    </Suspense>
-  );
-}
+export default DuasPage;

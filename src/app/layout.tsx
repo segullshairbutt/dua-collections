@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import Footer from 'components/Footer';
-import Navbar from 'components/Navbar';
+import { Navbar } from 'components/Navbar';
 
 import 'styles/globals.css';
 
@@ -23,9 +23,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        <div className="relative overflow-hidden pt-16 pb-32 space-y-24 min-h-[calc(100vh_-_156px)]">{children}</div>
-        <Footer />
+        <Suspense fallback={<div className="text-center my-80"> Loading... </div>}>
+          <Navbar />
+          <div className="relative pt-16 pb-32 min-h-[calc(100vh_-_156px)]">{children}</div>
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );

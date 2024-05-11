@@ -8,12 +8,8 @@
         "destination": "/index.html"
       },
       {
-        "source": "MasnoonDuas",
-        "destination": "/MasnoonDuas.html"
-      },
-      {
-        "source": "QuranDuas",
-        "destination": "/QuranDuas.html"
+        "source": "Duas",
+        "destination": "/Duas.html"
       },
       {
         "source": "**",

@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 
-import Image, { StaticImageData } from 'next/image';
+import Image, { ImageProps, StaticImageData } from 'next/image';
 import Link from 'next/link';
 
 import { UrlObject } from 'url';
@@ -11,9 +11,10 @@ interface SectionProps {
   description: string;
   icon: ReactElement;
   image: StaticImageData;
+  imgProps?: Partial<ImageProps>;
 }
 
-const Section = ({ description, icon, href, title, image }: SectionProps) => {
+const Section = ({ description, icon, href, title, image, imgProps }: SectionProps) => {
   return (
     <div className="relative">
       <div className="md:mx-auto md:grid md:max-w-7xl md:grid-flow-col-dense md:grid-cols-2 md:gap-24 md:px-8">
@@ -42,7 +43,7 @@ const Section = ({ description, icon, href, title, image }: SectionProps) => {
         <div className="mt-12 sm:mt-16 md:mt-0 md:block hidden">
           <div className="-mr-48 pl-6 md:-mr-16 md:relative md:m-0 md:h-full md:px-0">
             <Image
-              loading="lazy"
+              {...imgProps}
               width="647"
               height="486"
               className="w-full rounded-xl shadow-2xl ring-1 ring-black ring-opacity-5 md:absolute md:left-0 md:h-full md:w-auto md:max-w-none"

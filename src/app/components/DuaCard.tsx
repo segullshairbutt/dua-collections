@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { FC, useLayoutEffect, useRef } from 'react';
 
 import { Amiri_Quran } from 'next/font/google';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ const isArabic = (text: string) => {
 };
 
 const ArabicFont = Amiri_Quran({ weight: '400', subsets: ['arabic'] });
-const Dua = ({ category, content, referenceLink, tags, title, translation }: DuaCardProps) => {
+const DuaCard: FC<DuaCardProps> = ({ category, content, referenceLink, tags, title, translation }) => {
   const duaRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
@@ -81,4 +81,4 @@ const Dua = ({ category, content, referenceLink, tags, title, translation }: Dua
   );
 };
 
-export default Dua;
+export default DuaCard;
