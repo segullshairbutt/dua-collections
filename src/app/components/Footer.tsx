@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-100 text-gray-600 py-4">
       <div className="container mx-auto text-center">
-        <p>&copy; 2023 Dua Collection. All Rights Reserved.</p>
+        <p>&copy; 2024 Dua Collection. All Rights Reserved.</p>
         <div className="mt-4">
           {/* Social Media Links */}
           <Link
