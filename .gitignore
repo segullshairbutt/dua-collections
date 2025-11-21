@@ -11,4 +11,6 @@ wheels/
 
 .DS_Store
 
+# Django things
 *.sqlite3
+staticfiles/

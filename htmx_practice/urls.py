@@ -15,10 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import include, path
 
+
+def root_redirect(request):
+    return redirect("dua_collection:dua_list")
+
+
 urlpatterns = [
+    path("", root_redirect, name="root"),
     path("admin/", admin.site.urls),
     path("duas/", include("dua_collection.urls")),
 ]
+
+# Serve static files in all environments (including production)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
