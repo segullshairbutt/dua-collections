@@ -2,6 +2,7 @@ from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 from .models import Dua, Tag
@@ -123,3 +124,15 @@ def dua_translations_view(request, dua_id):
         return HttpResponse(html)
     except Dua.DoesNotExist:
         return HttpResponse('<div class="alert alert-warning">Dua not found.</div>')
+
+
+class DuaDetailView(DetailView):
+    model = Dua
+    template_name = "dua_collection/dua_detail.html"
+    context_object_name = "dua"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Add translations to context
+        context["translations"] = self.object.translations.all().order_by("language")
+        return context

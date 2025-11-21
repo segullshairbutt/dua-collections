@@ -1,12 +1,19 @@
 <div class="card dua-card border-0 shadow-sm">
-    <div class="card-body p-4">
-        <h3 class="card-title dua-title h4 fw-bold">
-            {{ dua.title }}
-        </h3>
-        
-        <div class="dua-text mb-4" lang="ar" dir="rtl">
-            {{ dua.text }}
+    <a href="{% url 'dua_collection:dua_detail' dua.pk %}" class="text-decoration-none text-dark card-link">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <h3 class="card-title dua-title h4 fw-bold mb-0">
+                    {{ dua.title }}
+                </h3>
+                <i class="fas fa-external-link-alt text-muted ms-2" style="font-size: 0.8rem;"></i>
+            </div>
+            
+            <div class="dua-text mb-4" lang="ar" dir="rtl">
+                {{ dua.text|linebreaks }}
+            </div>
         </div>
+    </a>
+    <div class="card-body pt-0">
         
         <!-- Translation Section -->
         <div class="mb-4" id="translation-section-{{ dua.id }}">
@@ -14,7 +21,8 @@
                     type="button" 
                     hx-get="{% url 'dua_collection:dua_translations' dua.id %}?action=show"
                     hx-target="#translation-section-{{ dua.id }}"
-                    hx-swap="outerHTML">
+                    hx-swap="outerHTML"
+                    onclick="event.stopPropagation()">
                 <i class="fas fa-language me-2"></i>
                 <span>View Translations</span>
                 <i class="fas fa-chevron-down ms-2"></i>
@@ -34,13 +42,15 @@
                                         <a href="?{% for other_tag in selected_tags %}{% if other_tag.id != tag.id %}tags={{ other_tag.id }}&{% endif %}{% endfor %}{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}" 
                                            class="text-white ms-1 text-decoration-none" 
                                            style="font-weight: bold;"
-                                           title="Remove filter">
+                                           title="Remove filter"
+                                           onclick="event.stopPropagation()">
                                             ×
                                         </a>
                                     </span>
                                 {% else %}
                                     <a href="?{% for param_name, param_value in request.GET.items %}{% if param_name != 'page' %}{{ param_name }}={{ param_value }}&{% endif %}{% endfor %}tags={{ tag.id }}" 
-                                       class="badge bg-light text-dark tag-badge border text-decoration-none">
+                                       class="badge bg-light text-dark tag-badge border text-decoration-none"
+                                       onclick="event.stopPropagation()">
                                         <i class="fas fa-tag me-1"></i>{{ tag.name }}
                                     </a>
                                 {% endif %}
@@ -52,7 +62,8 @@
             
             <div class="col-md-4 text-md-end">
                 {% if dua.source %}
-                    <a href="{{ dua.source }}" class="source-link" target="_blank" rel="noopener noreferrer">
+                    <a href="{{ dua.source }}" class="source-link" target="_blank" rel="noopener noreferrer"
+                       onclick="event.stopPropagation()">
                         View Source
                         <i class="fas fa-external-link-alt ms-1"></i>
                     </a>
