@@ -1,0 +1,32 @@
+<!-- Selected Tag Filters -->
+{% if selected_tags %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 bg-light">
+            <div class="card-body py-3">
+                <div class="d-flex align-items-center flex-wrap">
+                    <small class="text-muted me-3 mb-2">
+                        <i class="fas fa-filter me-1"></i>
+                        <strong>Active Filters:</strong>
+                    </small>
+                    {% for tag in selected_tags %}
+                        <span class="badge bg-primary me-2 mb-2 d-inline-flex align-items-center">
+                            <i class="fas fa-tag me-1"></i>
+                            <span class="me-2">{{ tag.name }}</span>
+                            <a href="?{% for other_tag in selected_tags %}{% if other_tag.id != tag.id %}tags={{ other_tag.id }}&{% endif %}{% endfor %}{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}" 
+                               class="text-white text-decoration-none d-inline-flex align-items-center justify-content-center" 
+                               style="width: 18px; height: 18px; background-color: rgba(255,255,255,0.3); border-radius: 50%; font-size: 12px; font-weight: bold;"
+                               title="Remove filter">
+                                ×
+                            </a>
+                        </span>
+                    {% endfor %}
+                    <a href="{% url 'dua_collection:dua_list' %}" class="btn btn-sm btn-outline-secondary mb-2">
+                        <i class="fas fa-times me-1"></i>Clear All
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

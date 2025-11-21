@@ -1,0 +1,77 @@
+{% extends "core/base.html" %}
+
+{% block head %}
+    <title>Dua Collection</title>
+    <style>
+        .dua-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .dua-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .dua-text {
+            font-family: 'Amiri', 'Times New Roman', serif;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-right: 4px solid #28a745;
+        }
+        .tag-badge {
+            margin: 2px;
+        }
+        .source-link {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .source-link:hover {
+            color: #495057;
+            text-decoration: underline;
+        }
+        .dua-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-primary mb-0">
+                    <i class="fas fa-prayer-hands me-2"></i>
+                    Collection of Duas
+                </h2>
+                <span class="badge bg-secondary fs-6">{{ page_obj.paginator.count }} duas</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filter Components -->
+    {% include 'dua_collection/partials/active_filters.html' %}
+    {% include 'dua_collection/partials/available_tags.html' %}
+    
+    <!-- Dua List -->
+    {% for dua in page_obj %}
+    <div class="row mb-4">
+        <div class="col-12">
+            {% include 'dua_collection/partials/dua_card.html' %}
+        </div>
+    </div>
+    {% empty %}
+        {% include 'dua_collection/partials/empty_state.html' %}
+    {% endfor %}
+    
+    <!-- Pagination -->
+    {% include 'dua_collection/partials/pagination.html' %}
+</div>
+{% endblock %}

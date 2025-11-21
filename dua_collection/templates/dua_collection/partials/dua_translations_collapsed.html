@@ -1,0 +1,11 @@
+<div class="mb-4" id="translation-section-{{ dua.id }}">
+    <button class="btn btn-outline-primary btn-sm d-flex align-items-center" 
+            type="button" 
+            hx-get="{% url 'dua_collection:dua_translations' dua.id %}?action=show"
+            hx-target="#translation-section-{{ dua.id }}"
+            hx-swap="outerHTML">
+        <i class="fas fa-language me-2"></i>
+        <span>View Translations</span>
+        <i class="fas fa-chevron-down ms-2"></i>
+    </button>
+</div>

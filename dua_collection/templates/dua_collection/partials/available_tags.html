@@ -1,0 +1,48 @@
+<!-- All Available Tags -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0">
+            <div class="card-body py-3">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center">
+                        <small class="text-muted me-3">
+                            <i class="fas fa-tags me-1"></i>
+                            <strong>Filter by Tags:</strong>
+                        </small>
+                        <span class="badge bg-light text-muted">{{ all_tags|length }} available</span>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" 
+                            hx-get="{% url 'dua_collection:tag_search' %}"
+                            hx-target="#tag-search-container"
+                            hx-swap="innerHTML"
+                            id="expand-tags-btn">
+                        <i class="fas fa-search me-1"></i>
+                        Search & Filter Tags
+                        <i class="fas fa-chevron-down ms-1"></i>
+                    </button>
+                </div>
+                
+                <!-- Quick Tags (first 8) -->
+                <div class="d-flex align-items-center flex-wrap" id="quick-tags">
+                    {% for tag in all_tags|slice:":8" %}
+                        {% if tag.id not in selected_tag_ids %}
+                            <a href="?{% for param_name, param_value in request.GET.items %}{% if param_name != 'page' %}{{ param_name }}={{ param_value }}&{% endif %}{% endfor %}tags={{ tag.id }}" 
+                               class="badge bg-light text-dark me-2 mb-2 text-decoration-none border">
+                                <i class="fas fa-tag me-1"></i>{{ tag.name }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if all_tags|length > 8 %}
+                        <small class="text-muted">
+                            <i class="fas fa-ellipsis-h me-1"></i>
+                            {{ all_tags|length|add:"-8" }} more tags available
+                        </small>
+                    {% endif %}
+                </div>
+                
+                <!-- Expandable Tag Search Container -->
+                <div id="tag-search-container"></div>
+            </div>
+        </div>
+    </div>
+</div>

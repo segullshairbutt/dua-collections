@@ -1,0 +1,97 @@
+<div class="mb-4" id="translation-section-{{ dua.id }}">
+    <!-- Hide Button -->
+    <button class="btn btn-primary btn-sm d-flex align-items-center" 
+            type="button" 
+            hx-get="{% url 'dua_collection:dua_translations' dua.id %}?action=hide"
+            hx-target="#translation-section-{{ dua.id }}"
+            hx-swap="outerHTML">
+        <i class="fas fa-language me-2"></i>
+        <span>Hide Translations</span>
+        <i class="fas fa-chevron-up ms-2"></i>
+    </button>
+    
+    <!-- Translations Content -->
+    {% if translations %}
+        <div class="translations-container mt-3">
+            {% for translation in translations %}
+                <div class="translation-item mb-3 p-3 border rounded bg-light">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-secondary">
+                            <i class="fas fa-globe me-1"></i>
+                            {% if translation.language == 'en' %}
+                                English
+                            {% elif translation.language == 'ur' %}
+                                Urdu
+                            {% else %}
+                                {{ translation.language|title }}
+                            {% endif %}
+                        </span>
+                        <small class="text-muted">
+                            <i class="fas fa-quote-left me-1"></i>
+                            Translation
+                        </small>
+                    </div>
+                    
+                    <div class="translation-text" 
+                         {% if translation.language == 'ur' or translation.language == 'ar' %}
+                         lang="{{ translation.language }}" dir="rtl"
+                         {% else %}
+                         lang="{{ translation.language }}"
+                         {% endif %}>
+                        {{ translation.text }}
+                    </div>
+                </div>
+            {% endfor %}
+            
+            <div class="mt-3 text-center">
+                <small class="text-muted">
+                    <i class="fas fa-check-circle me-1 text-success"></i>
+                    {{ translations.count }} translation{{ translations.count|pluralize }} available
+                </small>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-4 mt-3">
+            <div class="text-muted">
+                <i class="fas fa-language" style="font-size: 2rem; opacity: 0.3;"></i>
+                <p class="mt-2 mb-0">No translations available for this dua.</p>
+                <small class="text-muted">
+                    Translations may be added in the future.
+                </small>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .translation-text {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #495057;
+    }
+    
+    .translation-item {
+        transition: all 0.2s ease-in-out;
+        border-color: #e9ecef !important;
+    }
+    
+    .translation-item:hover {
+        border-color: #007bff !important;
+        box-shadow: 0 2px 8px rgba(0,123,255,0.1);
+    }
+    
+    .translations-container {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* RTL support for Urdu and Arabic */
+    [dir="rtl"] .translation-text {
+        text-align: right;
+        font-family: 'Amiri', 'Noto Nastaliq Urdu', serif;
+    }
+</style>

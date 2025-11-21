@@ -1,0 +1,11 @@
+.amiri-quran-regular {
+  font-family: "Amiri Quran", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dua-text[lang="ar"] {
+  font-family: "Amiri Quran", serif;
+  font-weight: 600;
+  font-style: normal;
+}
