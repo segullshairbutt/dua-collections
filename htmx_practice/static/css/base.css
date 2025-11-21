@@ -1,11 +1,15 @@
-.amiri-quran-regular {
-  font-family: "Amiri Quran", serif;
-  font-weight: 400;
-  font-style: normal;
+:root {
+  --amiri-font-family: "Amiri Quran", serif;
+  --amiri-font-weight-regular: 400;
+  --amiri-font-weight-semibold: 600;
+  --nastaliq-font-family: "Nastaliq Urdu", serif;
 }
 
-.dua-text[lang="ar"] {
-  font-family: "Amiri Quran", serif;
-  font-weight: 600;
-  font-style: normal;
+
+[lang="ar"] {
+  font-family: var(--amiri-font-family);
+}
+
+[lang="ur"]{
+  font-family: var(--nastaliq-font-family);
 }

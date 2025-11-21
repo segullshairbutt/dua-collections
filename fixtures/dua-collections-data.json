@@ -324,6 +324,24 @@
   }
 },
 {
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$b1eWEAlhqJj7aGb1SsBtSg$5/18R+Z/uZ+eZ779KR7XJvSqxcaysO1agHbpNzHfUDY=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@temp.org",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-21T14:17:26.983Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "contenttypes.contenttype",
   "pk": 1,
   "fields": {
