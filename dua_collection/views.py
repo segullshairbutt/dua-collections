@@ -1,8 +1,8 @@
-from django.views.generic.list import ListView
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404
 from django.db.models import Count
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from django.views.generic.list import ListView
 
 from .models import Dua, Tag
 

@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class DuaCollectionConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'dua_collection'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "dua_collection"

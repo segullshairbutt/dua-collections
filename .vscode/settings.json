@@ -1,31 +1,15 @@
 {
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.tabSize": 2,
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "javascript.validate.enable": false,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
-  "eslint.workingDirectories": ["app"],
-  "prettier.enable": true,
-  "prettier.useEditorConfig": false, // Fixes a bug that does not read the .prettierrc.js properly (printWidth)
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "python.defaultInterpreterPath": ".venv/bin/python",
+  "editor.rulers": [120],
+  "editor.wordWrapColumn": 120,
+  "[python]": {
     "editor.formatOnSave": true,
-    "editor.rulers": [120]
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.rulers": [120],
+    "editor.wordWrapColumn": 120
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.rulers": [120]
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  }
+  "editor.tabSize": 2
 }
