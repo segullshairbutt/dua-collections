@@ -13,7 +13,7 @@
                         <span class="badge bg-primary me-2 mb-2 d-inline-flex align-items-center">
                             <i class="fas fa-tag me-1"></i>
                             <span class="me-2">{{ tag.name }}</span>
-                            <a href="?{% for other_tag in selected_tags %}{% if other_tag.id != tag.id %}tags={{ other_tag.id }}&{% endif %}{% endfor %}{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}" 
+                            <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% for other_tag in selected_tags %}{% if other_tag.id != tag.id %}tags={{ other_tag.id }}&{% endif %}{% endfor %}{% if request.GET.page %}page={{ request.GET.page }}&{% endif %}" 
                                class="text-white text-decoration-none d-inline-flex align-items-center justify-content-center" 
                                style="width: 18px; height: 18px; background-color: rgba(255,255,255,0.3); border-radius: 50%; font-size: 12px; font-weight: bold;"
                                title="Remove filter">
@@ -21,8 +21,8 @@
                             </a>
                         </span>
                     {% endfor %}
-                    <a href="{% url 'dua_collection:dua_list' %}" class="btn btn-sm btn-outline-secondary mb-2">
-                        <i class="fas fa-times me-1"></i>Clear All
+                    <a href="{% if search_query %}?search={{ search_query }}{% else %}{% url 'dua_collection:dua_list' %}{% endif %}" class="btn btn-sm btn-outline-secondary mb-2">
+                        <i class="fas fa-times me-1"></i>Clear All Filters
                     </a>
                 </div>
             </div>

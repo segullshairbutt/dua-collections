@@ -1,0 +1,51 @@
+/* Search Form Specific Styles */
+.search-form {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.search-input {
+    border-radius: 8px 0 0 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.search-btn {
+    border-radius: 0;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    border: 2px solid #007bff;
+    background: #007bff;
+    transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.search-form .btn-outline-secondary {
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    border: 2px solid #6c757d;
+    transition: all 0.3s ease;
+}
+
+.search-form .btn-outline-secondary:hover {
+    background: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    transform: translateY(-1px);
+}

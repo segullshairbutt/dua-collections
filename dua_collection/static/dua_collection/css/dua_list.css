@@ -1,0 +1,42 @@
+/* Dua List Specific Styles */
+
+.dua-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.dua-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.dua-text {
+    font-family: 'Amiri', 'Times New Roman', serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-right: 4px solid #28a745;
+}
+
+.tag-badge {
+    margin: 2px;
+}
+
+.source-link {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.source-link:hover {
+    color: #495057;
+    text-decoration: underline;
+}
+
+.dua-title {
+    color: #2c3e50;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}

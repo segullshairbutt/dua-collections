@@ -16,6 +16,15 @@ class DuaListView(ListView):
     def get_queryset(self):
         queryset = Dua.objects.prefetch_related("tags").order_by("title")
 
+        # Get search query from query parameters
+        search_query = self.request.GET.get("search", "").strip()
+        if search_query:
+            from django.db.models import Q
+
+            queryset = queryset.filter(
+                Q(title__icontains=search_query) | Q(text__icontains=search_query)
+            )
+
         # Get tag IDs from query parameters
         tag_ids = self.request.GET.getlist("tags")
         if tag_ids:
@@ -49,20 +58,23 @@ class DuaListView(ListView):
         else:
             context["selected_tags"] = []
 
+        # Add search query to context
+        context["search_query"] = self.request.GET.get("search", "").strip()
+
         return context
 
 
 def tag_search_view(request):
     """HTMX view for expandable tag search"""
 
-    search_query = request.GET.get("search", "")
+    tag_search_query = request.GET.get("tag_search", "")
     selected_tag_ids = [
         int(tag_id) for tag_id in request.GET.getlist("tags") if tag_id.isdigit()
     ]
 
-    if search_query:
+    if tag_search_query:
         tags = (
-            Tag.objects.filter(name__icontains=search_query)
+            Tag.objects.filter(name__icontains=tag_search_query)
             .annotate(dua_count=Count("dua"))
             .order_by("-dua_count", "name")
         )
@@ -73,12 +85,13 @@ def tag_search_view(request):
 
     # Preserve current URL parameters
     current_params = dict(request.GET.items())
-    if "search" in current_params:
-        del current_params["search"]
+    # Remove the tag search parameter but keep the main dua search
+    if "tag_search" in current_params:
+        del current_params["tag_search"]
 
     context = {
         "tags": tags,
-        "search_query": search_query,
+        "search_query": tag_search_query,
         "selected_tag_ids": selected_tag_ids,
         "current_params": current_params,
     }

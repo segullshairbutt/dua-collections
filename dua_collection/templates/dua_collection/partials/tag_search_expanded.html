@@ -25,8 +25,8 @@
                    hx-target="#tag-search-container"
                    hx-swap="innerHTML"
                    hx-trigger="keyup changed delay:300ms"
-                   hx-include="[name='tags']"
-                   name="search"
+                   hx-include="[name='tags'], [name='search']"
+                   name="tag_search"
                    id="tag-search-input">
             {% if search_query %}
                 <button class="btn btn-outline-secondary" 
@@ -34,7 +34,7 @@
                         hx-get="{% url 'dua_collection:tag_search' %}"
                         hx-target="#tag-search-container"
                         hx-swap="innerHTML"
-                        hx-include="[name='tags']">
+                        hx-include="[name='tags'], [name='search']">
                     <i class="fas fa-times"></i>
                 </button>
             {% endif %}

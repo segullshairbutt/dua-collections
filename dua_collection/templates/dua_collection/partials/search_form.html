@@ -1,0 +1,34 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'dua_collection/css/search_form.css' %}">
+
+<!-- Search Form -->
+<div class="row mb-4">
+    <div class="col-12">
+        <form method="get" class="search-form">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    name="search" 
+                    class="form-control search-input" 
+                    placeholder="Search duas by title or text..." 
+                    value="{{ search_query }}"
+                    aria-label="Search duas"
+                >
+                <button class="btn btn-primary search-btn" type="submit">
+                    <i class="fas fa-search me-1"></i>
+                    Search
+                </button>
+                {% if search_query %}
+                <a href="{% url 'dua_collection:dua_list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i>
+                    Clear
+                </a>
+                {% endif %}
+            </div>
+            <!-- Preserve tag filters when searching -->
+            {% for tag_id in selected_tag_ids %}
+                <input type="hidden" name="tags" value="{{ tag_id }}">
+            {% endfor %}
+        </form>
+    </div>
+</div>
