@@ -1,35 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
+import CountdownTimer from '@/components/CountdownTimer';
 import Icon, { IconName } from '@/components/Icon';
-import { METHODS, MethodKey, PRAYERS, calcTimes, fmtTime, ymd } from '@/lib/prayerTimes';
+import {
+  City,
+  METHODS,
+  MethodKey,
+  PRAYERS,
+  Settings,
+  calcTimes,
+  fmtTime,
+  reverseGeocode,
+  ymd,
+} from '@/lib/prayerTimes';
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['400', '600', '700'] });
+const STORAGE_KEY = 'prayer-settings';
 
-interface Settings {
-  lat: number;
-  lng: number;
-  name: string;
-  tz: string;
-  method: MethodKey;
-  hanafi: boolean;
-  set: boolean;
-  auto: boolean;
-}
-interface City {
-  id: number;
-  name: string;
-  admin1?: string;
-  country?: string;
-  latitude: number;
-  longitude: number;
-  timezone?: string;
-}
-
-const KEY = 'prayer-settings';
 const DEFAULTS: Settings = {
   lat: 32.569,
   lng: 74.084,
@@ -48,7 +39,8 @@ const SHORT: Record<MethodKey, string> = {
   makkah: 'Umm al-Qura',
   karachi: 'Karachi',
 };
-const META: { sub: string; icon: IconName }[] = [
+
+const META: readonly { readonly sub: string; readonly icon: IconName }[] = [
   { sub: 'Dawn', icon: 'sunrise' },
   { sub: 'Shuruq • Non-prayer mark', icon: 'sun' },
   { sub: 'Midday', icon: 'sun' },
@@ -57,149 +49,204 @@ const META: { sub: string; icon: IconName }[] = [
   { sub: 'Night prayer', icon: 'moon' },
 ];
 
-// Fluid type scale: grows smoothly from small phones to desktop (min, preferred, max)
 const HS = 'text-[length:clamp(1rem,0.9rem_+_0.45vw,1.25rem)] leading-snug font-semibold';
 const LS = 'text-[length:clamp(0.65rem,0.6rem_+_0.25vw,0.8125rem)] leading-tight tracking-[0.04em] font-bold';
 const BODY = 'text-[length:clamp(0.8125rem,0.75rem_+_0.3vw,1rem)]';
 const BIG = 'text-[length:clamp(1.75rem,1.4rem_+_1.6vw,2.75rem)] leading-none font-bold tracking-tight';
-const CD = 'text-[length:clamp(1.05rem,0.9rem_+_0.8vw,1.6rem)] font-semibold tabular-nums tracking-wider';
 const SELECT = `w-full appearance-none bg-indigo-100/50 text-gray-800 ${BODY} rounded-lg px-3.5 py-3 pr-10 border border-gray-300/40 cursor-pointer focus:outline-none`;
-const pad = (n: number) => String(n).padStart(2, '0');
 
 export default function PrayerTimesPage() {
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
   const [ready, setReady] = useState(false);
-  const [now, setNow] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState<City[]>([]);
-  const [msg, setMsg] = useState('');
+  const [feedback, setFeedback] = useState('');
+  const [liveNow, setLiveNow] = useState<number>(() => Date.now());
+  const [livePct, setLivePct] = useState<number>(0);
 
-  const update = (p: Partial<Settings>) =>
+  const update = useCallback((p: Partial<Settings>) => {
     setSettings(prev => {
-      const n = { ...prev, ...p };
+      const next = { ...prev, ...p };
       try {
-        localStorage.setItem(KEY, JSON.stringify(n));
-      } catch {}
-      return n;
-    });
-
-  const locate = () => {
-    if (!navigator.geolocation) return setMsg('Geolocation not supported');
-    setMsg('Locating…');
-    navigator.geolocation.getCurrentPosition(
-      p => {
-        const { latitude: a, longitude: b } = p.coords;
-        update({ lat: a, lng: b, tz: '', auto: true, name: `${a.toFixed(2)}, ${b.toFixed(2)}`, set: true });
-        setMsg('');
-        fetch(
-          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${a}&longitude=${b}&localityLanguage=en`
-        )
-          .then(r => r.json())
-          .then(j => {
-            const n = [j.city || j.locality, j.countryName].filter(Boolean).join(', ');
-            if (n) update({ name: n });
-          })
-          .catch(() => {});
-      },
-      () => setMsg('Location denied. Search your city instead.'),
-      { timeout: 15000, maximumAge: 36e5 }
-    );
-  };
-
-  useEffect(() => {
-    let saved: Settings | null = null;
-    try {
-      saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-    } catch {}
-    if (saved) setSettings({ ...DEFAULTS, ...saved });
-    setNow(Date.now());
-    setReady(true);
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    const t = setTimeout(() => {
-      if (!saved?.set) {
-        try {
-          locate();
-        } catch {}
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (err) {
+        console.warn('Failed to save settings to localStorage:', err);
       }
-    }, 0);
-    return () => {
-      clearInterval(id);
-      clearTimeout(t);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      return next;
+    });
   }, []);
 
+  // Auto-clear feedback after 7 seconds
   useEffect(() => {
-    if (searchQuery.trim().length < 2) return setResults([]);
-    const id = setTimeout(async () => {
+    if (!feedback) return;
+    const timer = setTimeout(() => setFeedback(''), 7000);
+    return () => clearTimeout(timer);
+  }, [feedback]);
+
+  // Debounced Search with AbortController
+  useEffect(() => {
+    if (searchQuery.trim().length < 2) {
+      setResults([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(async () => {
       try {
         const r = await fetch(
-          `https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&name=${encodeURIComponent(searchQuery.trim())}`
+          `https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&name=${encodeURIComponent(searchQuery.trim())}`,
+          { signal: controller.signal }
         );
         const j = await r.json();
         setResults(j.results ?? []);
-        setMsg(j.results?.length ? '' : 'No match');
-      } catch {
-        setMsg('Search needs an internet connection');
+        setFeedback(j.results?.length ? '' : 'No match');
+      } catch (err: unknown) {
+        if (err instanceof Error && err.name !== 'AbortError') {
+          setFeedback('Search needs an internet connection');
+        }
       }
     }, 350);
-    return () => clearTimeout(id);
+
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [searchQuery]);
+  // 1. Define handleGeoLocation first
+  const handleGeoLocation = useCallback(() => {
+    if (!navigator.geolocation) {
+      setFeedback('Geolocation is not supported by your browser');
+      return;
+    }
 
-  if (!ready) return <p className="text-center text-gray-500 mt-24">Loading prayer times…</p>;
+    setFeedback('Locating…');
 
-  // Yesterday + today + tomorrow, without Sunrise, to find the previous and next prayer
-  const day = (off: number) =>
-    calcTimes(ymd(now + off * 864e5, settings.tz), settings.lat, settings.lng, settings.method, settings.hanafi)
-      .map((t, i) => ({ i, t }))
-      .filter(e => e.i !== 1);
-  const seq = [...day(-1), ...day(0), ...day(1)];
-  const k = Math.max(
-    1,
-    seq.findIndex(e => e.t > now)
+    navigator.geolocation.getCurrentPosition(
+      async position => {
+        const { latitude: lat, longitude: lng } = position.coords;
+        update({
+          lat,
+          lng,
+          tz: '',
+          auto: true,
+          name: `${lat.toFixed(2)}, ${lng.toFixed(2)}`,
+          set: true,
+        });
+
+        setFeedback('Fetching location name…');
+        const resolvedName = await reverseGeocode(lat, lng);
+        if (resolvedName) update({ name: resolvedName });
+        setFeedback('');
+      },
+      error => {
+        const errorMsg =
+          error.code === error.PERMISSION_DENIED
+            ? 'Location permission denied. Please search your city manually.'
+            : 'Unable to retrieve your location.';
+        setFeedback(errorMsg);
+      },
+      { timeout: 15000, maximumAge: 36e5 }
+    );
+  }, [update]);
+
+  // 2. Reuse it inside the mount useEffect safely
+  useEffect(() => {
+    let saved: Settings | null = null;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) saved = JSON.parse(raw);
+    } catch (err) {
+      console.warn('Failed to read settings from localStorage:', err);
+    }
+
+    if (saved) setSettings(prev => ({ ...prev, ...saved }));
+    setReady(true);
+
+    // Trigger auto-geolocation if settings haven't been configured yet
+    if (!saved?.set && typeof window !== 'undefined' && navigator.geolocation) {
+      handleGeoLocation();
+    }
+  }, [handleGeoLocation]);
+
+  // Decouple date anchor from high-frequency second-by-second live updates
+  const anchorDate = useMemo(() => Math.floor(liveNow / 864e5), [liveNow]);
+
+  const day = useCallback(
+    (offDays: number) =>
+      calcTimes(
+        ymd(liveNow + offDays * 864e5, settings.tz),
+        settings.lat,
+        settings.lng,
+        settings.method,
+        settings.hanafi
+      )
+        .map((t, i) => ({ i, t }))
+        .filter(e => e.i !== 1),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [anchorDate, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi]
   );
-  const nextE = seq[k];
-  const prevE = seq[k - 1];
-  const times = calcTimes(ymd(now, settings.tz), settings.lat, settings.lng, settings.method, settings.hanafi);
 
-  const sec = Math.max(0, Math.round((nextE.t - now) / 1000));
-  const cd = `${pad((sec / 3600) | 0)}:${pad(((sec % 3600) / 60) | 0)}:${pad(sec % 60)}`;
-  const pct = Math.min(100, Math.max(0, Math.round(((now - prevE.t) / (nextE.t - prevE.t)) * 100)));
+  const seq = useMemo(() => [...day(-1), ...day(0), ...day(1)], [day]);
+  const k = useMemo(
+    () =>
+      Math.max(
+        1,
+        seq.findIndex(e => e.t > liveNow)
+      ),
+    [seq, liveNow]
+  );
+  const nextE = seq[k] || seq[1];
+  const prevE = seq[k - 1] || seq[0];
+
+  const times = useMemo(
+    () => calcTimes(ymd(liveNow, settings.tz), settings.lat, settings.lng, settings.method, settings.hanafi),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [anchorDate, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi]
+  );
 
   const tz = settings.tz || undefined;
-  let hijri = '';
-  try {
-    hijri = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      timeZone: tz,
-    }).format(now);
-    if (!/AH/.test(hijri)) hijri += ' AH';
-  } catch {}
-  let off = '';
-  try {
-    off = (
-      new Intl.DateTimeFormat('en', { timeZone: tz, timeZoneName: 'shortOffset' })
-        .formatToParts(now)
-        .find(p => p.type === 'timeZoneName')?.value || ''
-    ).replace('GMT', 'UTC');
-  } catch {}
+  const hijri = useMemo(() => {
+    try {
+      let h = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: tz,
+      }).format(liveNow);
+      if (!/AH/.test(h)) h += ' AH';
+      return h;
+    } catch {
+      return '';
+    }
+  }, [liveNow, tz]);
+
+  const off = useMemo(() => {
+    try {
+      return (
+        new Intl.DateTimeFormat('en', { timeZone: tz, timeZoneName: 'shortOffset' })
+          .formatToParts(liveNow)
+          .find(p => p.type === 'timeZoneName')?.value || ''
+      ).replace('GMT', 'UTC');
+    } catch {
+      return '';
+    }
+  }, [liveNow, tz]);
+
   const city = /^-?\d/.test(settings.name) ? settings.name : settings.name.split(',')[0];
   const c = METHODS[settings.method];
   const angles = c.ishaMin
     ? `${c.fajr.toFixed(1)}° / ${c.ishaMin} min`
     : `${c.fajr.toFixed(1)}° / ${(c.isha as number).toFixed(1)}°`;
-
   const col = 'flex flex-col gap-4 sm:gap-5 min-w-0';
 
+  if (!ready) return <p className="text-center text-gray-500 mt-24">Loading prayer times…</p>;
+
   return (
-    // 1 column on phones/tablets, 2 columns (hero | schedule) from the lg breakpoint
     <main
       className={`${jakarta.className} w-full max-w-md sm:max-w-xl md:max-w-xl lg:max-w-5xl mx-auto px-4 sm:px-6 pt-4 lg:pt-8 grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-8 lg:items-start`}
     >
       <div className={col}>
-        {/* Location */}
+        {/* Location Section */}
         <section className="flex flex-col gap-2">
           <div className="relative">
             <div className="relative flex items-center bg-white rounded-full shadow-sm">
@@ -256,7 +303,7 @@ export default function PrayerTimesPage() {
 
           <div className="flex items-center justify-between gap-2 bg-white p-2 pr-3.5 sm:p-2.5 sm:pr-4 rounded-full shadow-sm">
             <button
-              onClick={locate}
+              onClick={handleGeoLocation}
               className={`flex items-center gap-1 bg-indigo-500 text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full ${BODY} font-semibold shadow-sm active:scale-95 transition-transform shrink-0`}
             >
               <Icon name="gps" className="w-[18px] h-[18px]" />
@@ -274,15 +321,15 @@ export default function PrayerTimesPage() {
               </span>
             </div>
           </div>
-          {msg && <p className={`text-center ${LS} font-normal text-gray-700`}>{msg}</p>}
+          {feedback && <p className={`text-center ${LS} font-normal text-gray-700`}>{feedback}</p>}
         </section>
 
-        {/* Hero */}
+        {/* Hero Section */}
         <section className="relative overflow-hidden bg-indigo-500 text-white rounded-xl p-4 sm:p-5 md:p-6 shadow-md">
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between gap-2">
               <span className={`${LS} text-gray-300 uppercase`}>
-                {new Date(now).toLocaleDateString('en-GB', {
+                {new Date(liveNow).toLocaleDateString('en-GB', {
                   weekday: 'long',
                   day: 'numeric',
                   month: 'long',
@@ -307,32 +354,38 @@ export default function PrayerTimesPage() {
               <span className={`flex items-center gap-1.5 ${LS} text-gray-300`}>
                 <span className="h-2 w-2 rounded-full bg-orange-400 animate-pulse" /> Next Prayer
               </span>
-              <span className={`${LS} px-2 py-0.5 rounded-full bg-orange-400 text-gray-800`}>
-                Adhan in {pad((sec / 3600) | 0)}h {pad(((sec % 3600) / 60) | 0)}m
-              </span>
+              <CountdownTimer
+                nextTime={nextE.t}
+                prevTime={prevE.t}
+                onTick={(n, _s, p) => {
+                  setLiveNow(n);
+                  setLivePct(p);
+                }}
+              />
             </div>
+
             <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1 mt-2">
               <div className="flex items-baseline gap-2">
                 <span className={BIG}>{PRAYERS[nextE.i]}</span>
                 <span className={`${BODY} font-semibold text-gray-300`}>{fmtTime(nextE.t, settings.tz)}</span>
               </div>
-              <div className="text-right">
-                <span className={`${CD} text-orange-400`}>{cd}</span>
-                <span className={`${LS} block text-gray-300`}>Remaining</span>
-              </div>
             </div>
+
             <div className="mt-3">
               <div className={`${LS} flex flex-wrap justify-between gap-x-2 text-gray-300 mb-1.5`}>
                 <span>
                   {PRAYERS[prevE.i]} {fmtTime(prevE.t, settings.tz)}
                 </span>
-                <span className="text-orange-400">{pct}% Elapsed</span>
+                <span className="text-orange-400">{livePct}% Elapsed</span>
                 <span>
                   {PRAYERS[nextE.i]} {fmtTime(nextE.t, settings.tz)}
                 </span>
               </div>
               <div className="w-full h-1.5 sm:h-2 bg-white/20 rounded-full overflow-hidden">
-                <div className="h-full bg-orange-400 rounded-full" style={{ width: `${pct}%` }} />
+                <div
+                  className="h-full bg-orange-400 rounded-full transition-all duration-500"
+                  style={{ width: `${livePct}%` }}
+                />
               </div>
             </div>
           </div>
@@ -340,13 +393,12 @@ export default function PrayerTimesPage() {
       </div>
 
       <div className={col}>
-        {/* Daily schedule */}
+        {/* Daily Schedule */}
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2 px-1">
             <h3 className={HS}>Daily Schedule</h3>
             <span className={`${LS} text-gray-800 truncate`}>
-              {city}
-              {off && ` • ${off}`}
+              {city} {off && ` • ${off}`}
             </span>
           </div>
           <div className="flex flex-col gap-1 sm:gap-1.5">
@@ -354,7 +406,7 @@ export default function PrayerTimesPage() {
               const name = PRAYERS[i];
               const isNext = nextE.i === i;
               const sun = i === 1;
-              const passed = !isNext && !sun && t <= now;
+              const passed = !isNext && !sun && t <= liveNow;
               return (
                 <div
                   key={name}
@@ -394,7 +446,9 @@ export default function PrayerTimesPage() {
                     </div>
                   </div>
                   <span
-                    className={`${HS} tabular-nums whitespace-nowrap shrink-0 ${isNext ? 'text-orange-400 font-bold' : sun ? 'text-gray-700' : ''}`}
+                    className={`${HS} tabular-nums whitespace-nowrap shrink-0 ${
+                      isNext ? 'text-orange-400 font-bold' : sun ? 'text-gray-700' : ''
+                    }`}
                   >
                     {fmtTime(t, settings.tz)}
                   </span>
@@ -404,7 +458,7 @@ export default function PrayerTimesPage() {
           </div>
         </section>
 
-        {/* Calculation settings */}
+        {/* Calculation Settings */}
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2 px-1">
             <h3 className={HS}>Calculation Settings</h3>
@@ -431,8 +485,7 @@ export default function PrayerTimesPage() {
               <div className="px-3.5 sm:px-4 pb-4 pt-3 border-t border-indigo-200 flex flex-col gap-4">
                 <label className="flex flex-col gap-1.5">
                   <span className={`flex flex-wrap justify-between gap-x-2 ${LS}`}>
-                    Calculation Method
-                    <span className="text-gray-700">Angles: {angles}</span>
+                    Calculation Method <span className="text-gray-700">Angles: {angles}</span>
                   </span>
                   <select
                     className={SELECT}
@@ -448,7 +501,7 @@ export default function PrayerTimesPage() {
                 </label>
                 <label className="flex flex-col gap-1.5">
                   <span className={`flex flex-wrap justify-between gap-x-2 ${LS}`}>
-                    Asr Juristic Method
+                    Asr Juristic Method{' '}
                     <span className="text-gray-700">{settings.hanafi ? 'Double Shadow' : 'Single Shadow'}</span>
                   </span>
                   <select

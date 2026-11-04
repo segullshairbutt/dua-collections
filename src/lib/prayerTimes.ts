@@ -1,6 +1,34 @@
 export type MethodKey = 'mwl' | 'isna' | 'egypt' | 'makkah' | 'karachi';
 
-export const METHODS: Record<MethodKey, { name: string; fajr: number; isha?: number; ishaMin?: number }> = {
+export interface CalculationMethod {
+  name: string;
+  fajr: number;
+  isha?: number;
+  ishaMin?: number;
+}
+
+export interface Settings {
+  lat: number;
+  lng: number;
+  name: string;
+  tz: string;
+  method: MethodKey;
+  hanafi: boolean;
+  set: boolean;
+  auto: boolean;
+}
+
+export interface City {
+  id: number;
+  name: string;
+  admin1?: string;
+  country?: string;
+  latitude: number;
+  longitude: number;
+  timezone?: string;
+}
+
+export const METHODS: Record<MethodKey, CalculationMethod> = {
   mwl: { name: 'Muslim World League', fajr: 18, isha: 17 },
   isna: { name: 'ISNA (North America)', fajr: 15, isha: 15 },
   egypt: { name: 'Egyptian Authority', fajr: 19.5, isha: 17.5 },
@@ -9,10 +37,8 @@ export const METHODS: Record<MethodKey, { name: string; fajr: number; isha?: num
 };
 
 export const PRAYERS = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'] as const;
-
 const R = Math.PI / 180;
 
-/** [year, monthIndex, day] of the given instant in the given timezone (device tz if empty). */
 export function ymd(ms: number, tz?: string): [number, number, number] {
   const p = new Intl.DateTimeFormat('en-CA', {
     timeZone: tz || undefined,
@@ -25,7 +51,6 @@ export function ymd(ms: number, tz?: string): [number, number, number] {
   return [+p[0], +p[1] - 1, +p[2]];
 }
 
-/** Returns epoch ms for [Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha] (NaN if undefined at this latitude). */
 export function calcTimes(
   [y, mo, dd]: [number, number, number],
   latDeg: number,
@@ -43,7 +68,6 @@ export function calcTimes(
   const ra = (Math.atan2(Math.cos(e) * Math.sin(L), Math.cos(L)) / R / 15 + 24) % 24;
   let eq = q / 15 - ra;
   eq = ((((eq + 12) % 24) + 24) % 24) - 12;
-
   const lat = latDeg * R;
   const noon = 12 - lng / 15 - eq;
   const c = METHODS[method];
@@ -66,3 +90,24 @@ export const fmtTime = (t: number, tz?: string) =>
   Number.isNaN(t)
     ? '—'
     : new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: tz || undefined });
+
+export const pad = (n: number) => String(n).padStart(2, '0');
+
+export async function reverseGeocode(lat: number, lng: number, signal?: AbortSignal): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`,
+      { signal }
+    );
+    if (!res.ok) throw new Error(`Reverse geocoding failed with status ${res.status}`);
+
+    const data = await res.json();
+    const locationName = [data.city || data.locality, data.countryName].filter(Boolean).join(', ');
+    return locationName || null;
+  } catch (error: any) {
+    if (error.name !== 'AbortError') {
+      console.warn('Reverse geocoding error:', error);
+    }
+    return null;
+  }
+}
