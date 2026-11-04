@@ -6,3 +6,18 @@ export const TAGS_ROUTES = [
   { name: 'Mosque', url: { pathname: '/duas', query: { tag: 'Mosque' } } },
   { name: 'House', url: { pathname: '/duas', query: { tag: 'House' } } },
 ];
+
+export const APPS_LIST = [
+  {
+    id: 'app-a',
+    name: 'Dua Collection',
+    description: 'General working application',
+    path: '/',
+  },
+  {
+    id: 'app-b',
+    name: 'Prayer Times',
+    description: 'Sub-app dashboard',
+    path: '/prayer-times',
+  },
+];
