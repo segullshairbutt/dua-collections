@@ -4,8 +4,8 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       { "source": "/", "destination": "/index.html" },
-      { "source": "Duas", "destination": "/Duas.html" },
-      { "source": "/PrayerTimes", "destination": "/PrayerTimes.html" },
+      { "source": "duas", "destination": "/duas.html" },
+      { "source": "/Praprayer-timesyerTimes", "destination": "/prayer-times.html" },
       { "source": "**", "destination": "/404.html" }
     ],
     "headers": [
