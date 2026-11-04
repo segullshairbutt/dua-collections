@@ -3,18 +3,14 @@
     "public": "out",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
-      {
-        "source": "/",
-        "destination": "/index.html"
-      },
-      {
-        "source": "Duas",
-        "destination": "/Duas.html"
-      },
-      {
-        "source": "**",
-        "destination": "/404.html"
-      }
+      { "source": "/", "destination": "/index.html" },
+      { "source": "Duas", "destination": "/Duas.html" },
+      { "source": "/PrayerTimes", "destination": "/PrayerTimes.html" },
+      { "source": "**", "destination": "/404.html" }
+    ],
+    "headers": [
+      { "source": "/sw.js", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "/manifest.json", "headers": [{ "key": "Content-Type", "value": "application/manifest+json" }] }
     ]
   }
 }
