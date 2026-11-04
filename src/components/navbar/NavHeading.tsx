@@ -17,7 +17,7 @@ const NavHeading: FC<NavHeadingProps> = ({ currentPath }) => {
   return (
     <div className="flex items-center justify-between w-full md:w-auto gap-3">
       <div className="flex items-center gap-1">
-        {currentPath !== '/' && <BackButton className="text-white" />}
+        {currentPath !== '/' && !isPrayerTimes && <BackButton className="text-white" />}
         <Link href={isPrayerTimes ? '/prayer-times' : '/duas'}>
           <h5 id="drawer-navigation-label" className="font-bold text-gray-300 uppercase dark:text-gray-400">
             {appTitle}

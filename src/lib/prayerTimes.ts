@@ -31,7 +31,7 @@ export function calcTimes(
   latDeg: number,
   lng: number,
   method: MethodKey,
-  hanafi: boolean,
+  hanafi: boolean
 ): number[] {
   const base = Date.UTC(y, mo, dd);
   const D = base / 864e5 + 2440588 - 2451545;
@@ -59,7 +59,7 @@ export function calcTimes(
     maghrib,
     c.ishaMin ? maghrib + c.ishaMin / 60 : noon + T(c.isha as number),
   ];
-  return hours.map((h) => base + h * 36e5);
+  return hours.map(h => base + h * 36e5);
 }
 
 export const fmtTime = (t: number, tz?: string) =>
