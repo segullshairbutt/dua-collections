@@ -10,7 +10,7 @@ import NavButton from './NavButton';
 import NavHeading from './NavHeading';
 import { TAGS_ROUTES } from './routes';
 
-import allDuas from 'duas.json';
+import duas from '@/data/duas.json';
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -26,7 +26,7 @@ const Navbar = () => {
       return acc;
     }, []);
 
-    return allDuas
+    return duas
       .flatMap(d => d.tags)
       .filter((value, index, array) => {
         return array.indexOf(value) === index && !tagsDisplayedInMenu.includes(value);

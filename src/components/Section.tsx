@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import Image, { ImageProps, StaticImageData } from 'next/image';
 import Link from 'next/link';
 
@@ -10,8 +11,8 @@ interface SectionProps {
   title: string;
   description: string;
   icon: ReactElement;
-  image: StaticImageData;
-  imgProps?: Partial<ImageProps>;
+  image: string | StaticImport;
+  imgProps?: Partial<Omit<ImageProps, 'src' | 'alt' | 'width' | 'height'>>;
 }
 
 const Section = ({ description, icon, href, title, image, imgProps }: SectionProps) => {

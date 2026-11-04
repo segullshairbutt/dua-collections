@@ -3,11 +3,11 @@ import { ReactNode, Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import Footer from 'components/Footer';
-import { Navbar } from 'components/Navbar';
-import ServiceWorkerRegister from 'components/ServiceWorkerRegister';
+import Footer from '@/components/Footer';
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
+import { Navbar } from '@/components/navbar';
 
-import 'styles/globals.css';
+import '@/styles/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import Link from 'next/link';
 
-import BackButton from 'components/BackButton';
+import BackButton from '../BackButton';
 
 interface NavHeadingProps {
   currentPath: string;
