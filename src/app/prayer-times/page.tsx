@@ -168,9 +168,6 @@ export default function PrayerTimesPage() {
     }
   }, [handleGeoLocation]);
 
-  // Decouple date anchor from high-frequency second-by-second live updates
-  const anchorDate = useMemo(() => Math.floor(liveNow / 864e5), [liveNow]);
-
   const day = useCallback(
     (offDays: number) =>
       calcTimes(
@@ -182,8 +179,7 @@ export default function PrayerTimesPage() {
       )
         .map((t, i) => ({ i, t }))
         .filter(e => e.i !== 1),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [anchorDate, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi]
+    [liveNow, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi]
   );
 
   const seq = useMemo(() => [...day(-1), ...day(0), ...day(1)], [day]);
@@ -200,8 +196,7 @@ export default function PrayerTimesPage() {
 
   const times = useMemo(
     () => calcTimes(ymd(liveNow, settings.tz), settings.lat, settings.lng, settings.method, settings.hanafi),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [anchorDate, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi]
+    [liveNow, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi]
   );
 
   const tz = settings.tz || undefined;
