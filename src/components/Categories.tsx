@@ -72,7 +72,7 @@ export const Category = ({ tag, isActive, onClick, activeClassName = 'text-indig
     <li
       className={`text-xs font-medium mx-1 my-1 text-gray-500 active:bg-indigo-100 hover:text-indigo-600 rounded ${isActive ? activeClassName : ''}`}
     >
-      <Link className="px-1" onClick={onClick} href={{ pathname: '/Duas', query: { tag: tag } }}>
+      <Link className="px-1" onClick={onClick} href={{ pathname: '/duas', query: { tag: tag } }}>
         {tag}
       </Link>
     </li>

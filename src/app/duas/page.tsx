@@ -4,23 +4,23 @@ import { useMemo } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
-import Bismillah from 'components/Bismillah';
-import Categories from 'components/Categories';
-import DuaCard from 'components/DuaCard';
+import Bismillah from '@/components/Bismillah';
+import Categories from '@/components/Categories';
+import DuaCard from '@/components/DuaCard';
 
-import allDuas from 'duas.json';
+import duas from '@/data/duas.json';
 
 const DuasPage = () => {
   const searchParams = useSearchParams();
   const tagFilter = searchParams.get('tag');
 
   const filteredDuas = useMemo(
-    () => (tagFilter == null ? allDuas : allDuas.filter(dua => dua.tags.includes(tagFilter))),
+    () => (tagFilter == null ? duas : duas.filter(dua => dua.tags.includes(tagFilter))),
     [tagFilter]
   );
 
   const duaTags = useMemo(() => {
-    return allDuas
+    return duas
       .flatMap(d => d.tags)
       .filter((value, index, array) => {
         return array.indexOf(value) === index;

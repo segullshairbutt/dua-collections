@@ -7,7 +7,10 @@ interface NavButtonProps {
 const NavButton: FC<NavButtonProps> = ({ toggle, navbar }) => {
   return (
     <div className="md:hidden">
-      <button className="text-gray-400 cursor-pointer hover:text-gray-500 relative z-50" onClick={toggle}>
+      <button
+        className="p-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors flex items-center justify-center focus:outline-none"
+        onClick={toggle}
+      >
         {navbar ? (
           <i className="block h-4 w-4">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

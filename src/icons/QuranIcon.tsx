@@ -1,4 +1,4 @@
-const AlQuran = () => {
+const QuranIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -160,4 +160,4 @@ const AlQuran = () => {
   );
 };
 
-export default AlQuran;
+export default QuranIcon;

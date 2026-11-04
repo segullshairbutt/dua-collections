@@ -1,4 +1,4 @@
-const Hadith = () => {
+const HadithIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -151,4 +151,4 @@ const Hadith = () => {
   );
 };
 
-export default Hadith;
+export default HadithIcon;
