@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { METHODS, MethodKey, PRAYERS, calcTimes, fmtTime, ymd } from 'lib/prayerTimes';
+import { METHODS, MethodKey, PRAYERS, calcTimes, fmtTime, ymd } from '@/lib/prayerTimes';
 
 interface Settings {
   lat: number;
@@ -43,7 +43,7 @@ export default function PrayerTimesPage() {
   const [msg, setMsg] = useState('');
 
   const update = (p: Partial<Settings>) =>
-    setS((prev) => {
+    setS(prev => {
       const n = { ...prev, ...p };
       try {
         localStorage.setItem(KEY, JSON.stringify(n));
@@ -55,20 +55,22 @@ export default function PrayerTimesPage() {
     if (!navigator.geolocation) return setMsg('Geolocation not supported');
     setMsg('Locating…');
     navigator.geolocation.getCurrentPosition(
-      (p) => {
+      p => {
         const { latitude: a, longitude: b } = p.coords;
         update({ lat: a, lng: b, tz: '', name: `${a.toFixed(2)}, ${b.toFixed(2)}`, set: true });
         setMsg('');
-        fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${a}&longitude=${b}&localityLanguage=en`)
-          .then((r) => r.json())
-          .then((j) => {
+        fetch(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${a}&longitude=${b}&localityLanguage=en`
+        )
+          .then(r => r.json())
+          .then(j => {
             const n = [j.city || j.locality, j.countryName].filter(Boolean).join(', ');
             if (n) update({ name: n });
           })
           .catch(() => {});
       },
       () => setMsg('Location denied. Search your city below instead.'),
-      { timeout: 15000, maximumAge: 36e5 },
+      { timeout: 15000, maximumAge: 36e5 }
     );
   };
 
@@ -80,9 +82,19 @@ export default function PrayerTimesPage() {
     if (saved) setS({ ...DEFAULTS, ...saved });
     setNow(Date.now());
     setReady(true);
-    if (!saved?.set) locate();
     const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
+    // Ask for location after the first paint, so it can never block rendering
+    const t = setTimeout(() => {
+      if (!saved?.set) {
+        try {
+          locate();
+        } catch {}
+      }
+    }, 0);
+    return () => {
+      clearInterval(id);
+      clearTimeout(t);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -91,7 +103,7 @@ export default function PrayerTimesPage() {
     const id = setTimeout(async () => {
       try {
         const r = await fetch(
-          `https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&name=${encodeURIComponent(q.trim())}`,
+          `https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&name=${encodeURIComponent(q.trim())}`
         );
         const j = await r.json();
         setResults(j.results ?? []);
@@ -103,25 +115,33 @@ export default function PrayerTimesPage() {
     return () => clearTimeout(id);
   }, [q]);
 
-  if (!ready) return null;
+  if (!ready) return <p className="text-center text-gray-500 mt-24">Loading prayer times…</p>;
 
   const times = calcTimes(ymd(now, s.tz), s.lat, s.lng, s.method, s.hanafi);
   let idx = times.findIndex((t, i) => i !== 1 && t > now);
-  const next =
-    idx >= 0 ? times[idx] : calcTimes(ymd(now + 864e5, s.tz), s.lat, s.lng, s.method, s.hanafi)[0];
+  const next = idx >= 0 ? times[idx] : calcTimes(ymd(now + 864e5, s.tz), s.lat, s.lng, s.method, s.hanafi)[0];
   if (idx < 0) idx = 0;
   const sec = Math.max(0, Math.round((next - now) / 1000));
-  const cd = [(sec / 3600) | 0, ((sec % 3600) / 60) | 0, sec % 60].map((v) => String(v).padStart(2, '0')).join(':');
+  const cd = [(sec / 3600) | 0, ((sec % 3600) / 60) | 0, sec % 60].map(v => String(v).padStart(2, '0')).join(':');
 
   let hijri = '';
   try {
-    hijri = ' · ' + new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
-      day: 'numeric', month: 'long', year: 'numeric', timeZone: s.tz || undefined,
-    }).format(now);
+    hijri =
+      ' · ' +
+      new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: s.tz || undefined,
+      }).format(now);
   } catch {}
   const dateStr =
-    new Date(now).toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long', timeZone: s.tz || undefined }) +
-    hijri;
+    new Date(now).toLocaleDateString([], {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      timeZone: s.tz || undefined,
+    }) + hijri;
 
   const field = 'w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5';
 
@@ -151,16 +171,24 @@ export default function PrayerTimesPage() {
       <p className="text-center text-sm text-gray-500 my-3">📍 {s.name}</p>
       {msg && <p className="text-center text-sm text-gray-500 mb-2">{msg}</p>}
 
-      <input className={field} placeholder="🔍 Search city (e.g. Dubai, London)" value={q} onChange={(e) => setQ(e.target.value)} />
+      <input
+        className={field}
+        placeholder="🔍 Search city (e.g. Dubai, London)"
+        value={q}
+        onChange={e => setQ(e.target.value)}
+      />
       <div className="flex flex-col gap-1.5 mt-2">
-        {results.map((c) => (
+        {results.map(c => (
           <button
             key={c.id}
             className="text-left rounded-xl border border-gray-200 bg-white px-3 py-2"
             onClick={() => {
               update({
-                lat: c.latitude, lng: c.longitude, tz: c.timezone || '',
-                name: [c.name, c.country].filter(Boolean).join(', '), set: true,
+                lat: c.latitude,
+                lng: c.longitude,
+                tz: c.timezone || '',
+                name: [c.name, c.country].filter(Boolean).join(', '),
+                set: true,
               });
               setQ('');
               setResults([]);
@@ -176,12 +204,18 @@ export default function PrayerTimesPage() {
       </button>
 
       <div className="flex gap-2 mt-4">
-        <select className={field} value={s.method} onChange={(e) => update({ method: e.target.value as MethodKey })}>
+        <select className={field} value={s.method} onChange={e => update({ method: e.target.value as MethodKey })}>
           {Object.entries(METHODS).map(([k, v]) => (
-            <option key={k} value={k}>{v.name}</option>
+            <option key={k} value={k}>
+              {v.name}
+            </option>
           ))}
         </select>
-        <select className={field} value={s.hanafi ? '1' : '0'} onChange={(e) => update({ hanafi: e.target.value === '1' })}>
+        <select
+          className={field}
+          value={s.hanafi ? '1' : '0'}
+          onChange={e => update({ hanafi: e.target.value === '1' })}
+        >
           <option value="0">Asr: Standard</option>
           <option value="1">Asr: Hanafi</option>
         </select>

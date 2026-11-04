@@ -1,15 +1,23 @@
 const V = 'duas-v1';
-const PAGES = ['/', '/Duas', '/PrayerTimes'];
+const PAGES = ['/', '/duas', '/prayer-times'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(V).then((c) => Promise.all(PAGES.map((p) => c.add(p).catch(() => {})))));
   self.skipWaiting();
 });
+
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((x) => x !== V).map((x) => caches.delete(x)))));
   self.clients.claim();
 });
-const put = (r, res) => { if (res.ok) { const cp = res.clone(); caches.open(V).then((c) => c.put(r, cp)); } return res; };
+
+const put = (r, res) => { 
+  if (res.ok) { 
+    const cp = res.clone(); 
+    caches.open(V).then((c) => c.put(r, cp)); 
+  } 
+  return res; 
+};
 
 self.addEventListener('fetch', (e) => {
   const r = e.request, u = new URL(r.url);
