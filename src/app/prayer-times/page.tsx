@@ -24,6 +24,7 @@ const STORAGE_KEY = 'prayer-settings';
 const DEFAULTS: Settings = {
   lat: 32.569,
   lng: 74.084,
+  offsets: [0, 0, 0, 0, 0, 0],
   name: 'Gujrat, Pakistan',
   tz: 'Asia/Karachi',
   method: 'karachi',
@@ -38,6 +39,7 @@ const SHORT: Record<MethodKey, string> = {
   egypt: 'Egyptian',
   makkah: 'Umm al-Qura',
   karachi: 'Karachi',
+  diyanet: 'Diyanet / DİTİB',
 };
 
 const META: readonly { readonly sub: string; readonly icon: IconName }[] = [
@@ -53,7 +55,7 @@ const HS = 'text-[length:clamp(1rem,0.9rem_+_0.45vw,1.25rem)] leading-snug font-
 const LS = 'text-[length:clamp(0.65rem,0.6rem_+_0.25vw,0.8125rem)] leading-tight tracking-[0.04em] font-bold';
 const BODY = 'text-[length:clamp(0.8125rem,0.75rem_+_0.3vw,1rem)]';
 const BIG = 'text-[length:clamp(1.75rem,1.4rem_+_1.6vw,2.75rem)] leading-none font-bold tracking-tight';
-const SELECT = `w-full appearance-none bg-indigo-100/50 text-gray-800 ${BODY} rounded-lg px-3.5 py-3 pr-10 border border-gray-300/40 cursor-pointer focus:outline-none`;
+const SELECT = `w-full appearance-none bg-indigo-50/80 text-gray-800 ${BODY} rounded-lg px-3.5 py-3 pr-10 border border-indigo-200/60 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500`;
 
 export default function PrayerTimesPage() {
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
@@ -112,6 +114,7 @@ export default function PrayerTimesPage() {
       controller.abort();
     };
   }, [searchQuery]);
+
   // 1. Define handleGeoLocation first
   const handleGeoLocation = useCallback(() => {
     if (!navigator.geolocation) {
@@ -175,11 +178,12 @@ export default function PrayerTimesPage() {
         settings.lat,
         settings.lng,
         settings.method,
-        settings.hanafi
+        settings.hanafi,
+        settings.offsets
       )
         .map((t, i) => ({ i, t }))
         .filter(e => e.i !== 1),
-    [liveNow, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi]
+    [liveNow, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi, settings.offsets]
   );
 
   const seq = useMemo(() => [...day(-1), ...day(0), ...day(1)], [day]);
@@ -195,8 +199,16 @@ export default function PrayerTimesPage() {
   const prevE = seq[k - 1] || seq[0];
 
   const times = useMemo(
-    () => calcTimes(ymd(liveNow, settings.tz), settings.lat, settings.lng, settings.method, settings.hanafi),
-    [liveNow, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi]
+    () =>
+      calcTimes(
+        ymd(liveNow, settings.tz),
+        settings.lat,
+        settings.lng,
+        settings.method,
+        settings.hanafi,
+        settings.offsets
+      ),
+    [liveNow, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi, settings.offsets]
   );
 
   const tz = settings.tz || undefined;
@@ -234,22 +246,22 @@ export default function PrayerTimesPage() {
     : `${c.fajr.toFixed(1)}° / ${(c.isha as number).toFixed(1)}°`;
   const col = 'flex flex-col gap-4 sm:gap-5 min-w-0';
 
-  if (!ready) return <p className="text-center text-gray-500 mt-24">Loading prayer times…</p>;
+  if (!ready) return <p className="text-center text-indigo-600 font-medium mt-24">Loading prayer times…</p>;
 
   return (
     <main
-      className={`${jakarta.className} w-full max-w-md sm:max-w-xl md:max-w-xl lg:max-w-5xl mx-auto px-4 sm:px-6 pt-4 lg:pt-8 grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-8 lg:items-start`}
+      className={`${jakarta.className} w-full max-w-md sm:max-w-xl md:max-w-xl lg:max-w-5xl mx-auto px-4 sm:px-6 pt-4 lg:pt-8 grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-8 lg:items-start text-gray-900`}
     >
       <div className={col}>
         {/* Location Section */}
         <section className="flex flex-col gap-2">
           <div className="relative">
-            <div className="relative flex items-center bg-white rounded-full shadow-sm">
-              <span className="absolute left-4 text-gray-700 pointer-events-none">
+            <div className="relative flex items-center bg-white rounded-full shadow-sm border border-indigo-100">
+              <span className="absolute left-4 text-indigo-500 pointer-events-none">
                 <Icon name="search" className="w-5 h-5" />
               </span>
               <input
-                className={`w-full bg-transparent py-3.5 sm:py-4 pl-11 pr-11 ${BODY} placeholder:text-gray-700 focus:outline-none`}
+                className={`w-full bg-transparent py-3.5 sm:py-4 pl-11 pr-11 ${BODY} text-gray-800 placeholder:text-gray-400 focus:outline-none`}
                 placeholder="Search city or country…"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
@@ -261,18 +273,18 @@ export default function PrayerTimesPage() {
                     setSearchQuery('');
                     setResults([]);
                   }}
-                  className="absolute right-3.5 w-7 h-7 flex items-center justify-center rounded-full bg-indigo-200 text-gray-800"
+                  className="absolute right-3.5 w-7 h-7 flex items-center justify-center rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-colors"
                 >
                   <Icon name="close" className="w-4 h-4" />
                 </button>
               )}
             </div>
             {results.length > 0 && (
-              <div className="absolute z-20 left-0 right-0 mt-2 bg-white rounded-2xl shadow-lg overflow-hidden divide-y divide-indigo-100">
+              <div className="absolute z-20 left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl overflow-hidden divide-y divide-indigo-50 border border-indigo-100">
                 {results.map(r => (
                   <button
                     key={r.id}
-                    className={`w-full text-left px-4 py-2.5 ${BODY}`}
+                    className={`w-full text-left px-4 py-3 ${BODY} hover:bg-indigo-50/60 transition-colors`}
                     onClick={() => {
                       update({
                         lat: r.latitude,
@@ -286,8 +298,8 @@ export default function PrayerTimesPage() {
                       setResults([]);
                     }}
                   >
-                    {r.name}
-                    <span className={`block ${LS} font-normal text-gray-700`}>
+                    <span className="font-semibold text-gray-900">{r.name}</span>
+                    <span className={`block ${LS} font-normal text-gray-500`}>
                       {[r.admin1, r.country].filter(Boolean).join(', ')}
                     </span>
                   </button>
@@ -296,34 +308,36 @@ export default function PrayerTimesPage() {
             )}
           </div>
 
-          <div className="flex items-center justify-between gap-2 bg-white p-2 pr-3.5 sm:p-2.5 sm:pr-4 rounded-full shadow-sm">
+          <div className="flex items-center justify-between gap-2 bg-white p-2 pr-3.5 sm:p-2.5 sm:pr-4 rounded-full shadow-sm border border-indigo-100/60">
             <button
               onClick={handleGeoLocation}
-              className={`flex items-center gap-1 bg-indigo-500 text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full ${BODY} font-semibold shadow-sm active:scale-95 transition-transform shrink-0`}
+              className={`flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full ${BODY} font-semibold shadow-sm active:scale-95 transition-all shrink-0`}
             >
               <Icon name="gps" className="w-[18px] h-[18px]" />
               <span>
                 GPS<span className="hidden min-[380px]:inline"> location</span>
               </span>
             </button>
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="relative flex h-2 w-2 shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="relative flex h-2.5 w-2.5 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-800" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500" />
               </span>
-              <span className={`${LS} text-gray-800 truncate`}>
-                {settings.auto ? 'Auto-detected' : 'Selected'}: {settings.name}
+              <span className={`${LS} text-gray-700 truncate font-medium`}>
+                {settings.auto ? 'Auto-detected' : 'Selected'}:{' '}
+                <strong className="text-gray-900 font-semibold">{settings.name}</strong>
               </span>
             </div>
           </div>
-          {feedback && <p className={`text-center ${LS} font-normal text-gray-700`}>{feedback}</p>}
+          {feedback && <p className={`text-center ${LS} font-medium text-indigo-600`}>{feedback}</p>}
         </section>
 
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-indigo-500 text-white rounded-xl p-4 sm:p-5 md:p-6 shadow-md">
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center justify-between gap-2">
-              <span className={`${LS} text-gray-300 uppercase`}>
+        <section className="relative overflow-hidden bg-indigo-600 text-white rounded-2xl p-5 sm:p-6 shadow-lg flex flex-col gap-4">
+          {/* Top Row: Date & Hijri & Badge */}
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col gap-0.5">
+              <span className={`${LS} text-indigo-200 uppercase tracking-wider`}>
                 {new Date(liveNow).toLocaleDateString('en-GB', {
                   weekday: 'long',
                   day: 'numeric',
@@ -332,53 +346,60 @@ export default function PrayerTimesPage() {
                   timeZone: tz,
                 })}
               </span>
-              <span className={`${LS} px-2.5 py-0.5 rounded-full bg-white/10 shrink-0`}>Today</span>
+              {hijri && (
+                <h2 className={`${HS} flex items-center gap-1.5 text-indigo-50 font-semibold`}>
+                  <span className="text-orange-400">
+                    <Icon name="moon" className="w-4 h-4" fill />
+                  </span>
+                  {hijri}
+                </h2>
+              )}
             </div>
-            {hijri && (
-              <h2 className={`${HS} flex items-center gap-1.5`}>
-                <span className="text-orange-400">
-                  <Icon name="moon" className="w-5 h-5" fill />
-                </span>
-                {hijri}
-              </h2>
-            )}
+            <span className={`${LS} px-3 py-1 rounded-full bg-white/15 text-white font-bold tracking-wide shrink-0`}>
+              Today
+            </span>
           </div>
 
-          <div className="mt-4 bg-white/10 backdrop-blur-md rounded-lg p-3.5 sm:p-4 md:p-5">
-            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
-              <span className={`flex items-center gap-1.5 ${LS} text-gray-300`}>
+          {/* Main Countdown & Active Info Card */}
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-white/10 flex flex-col gap-3">
+            {/* Label & Live Timer Row */}
+            <div className="flex items-center justify-between">
+              <span
+                className={`inline-flex items-center gap-2 ${LS} px-3 py-1 rounded-full bg-white/15 text-indigo-100 font-bold uppercase tracking-wider`}
+              >
                 <span className="h-2 w-2 rounded-full bg-orange-400 animate-pulse" /> Next Prayer
               </span>
-              <CountdownTimer
-                nextTime={nextE.t}
-                prevTime={prevE.t}
-                onTick={(n, _s, p) => {
-                  setLiveNow(n);
-                  setLivePct(p);
-                }}
-              />
-            </div>
-
-            <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1 mt-2">
-              <div className="flex items-baseline gap-2">
-                <span className={BIG}>{PRAYERS[nextE.i]}</span>
-                <span className={`${BODY} font-semibold text-gray-300`}>{fmtTime(nextE.t, settings.tz)}</span>
+              <div className="text-lg sm:text-xl font-bold text-orange-300 font-mono tracking-tight">
+                <CountdownTimer
+                  nextTime={nextE.t}
+                  prevTime={prevE.t}
+                  onTick={(n, _s, p) => {
+                    setLiveNow(n);
+                    setLivePct(p);
+                  }}
+                />
               </div>
             </div>
 
-            <div className="mt-3">
-              <div className={`${LS} flex flex-wrap justify-between gap-x-2 text-gray-300 mb-1.5`}>
+            {/* Big Prayer Name & Time Display (Clean, single source of truth) */}
+            <div className="flex items-baseline justify-between gap-2 pt-1">
+              <span className={BIG}>{PRAYERS[nextE.i]}</span>
+              <span className="text-xl sm:text-2xl font-bold text-orange-300 tabular-nums">
+                {fmtTime(nextE.t, settings.tz)}
+              </span>
+            </div>
+
+            {/* Progress Bar & Contextual Range Flow */}
+            <div className="flex flex-col gap-1.5 pt-1">
+              <div className={`${LS} flex justify-between text-indigo-200 font-medium`}>
                 <span>
-                  {PRAYERS[prevE.i]} {fmtTime(prevE.t, settings.tz)}
+                  {PRAYERS[prevE.i]} ({fmtTime(prevE.t, settings.tz)})
                 </span>
-                <span className="text-orange-400">{livePct}% Elapsed</span>
-                <span>
-                  {PRAYERS[nextE.i]} {fmtTime(nextE.t, settings.tz)}
-                </span>
+                <span className="text-orange-300 font-bold">{livePct}% Elapsed</span>
               </div>
-              <div className="w-full h-1.5 sm:h-2 bg-white/20 rounded-full overflow-hidden">
+              <div className="w-full h-2.5 bg-black/25 rounded-full overflow-hidden p-0.5">
                 <div
-                  className="h-full bg-orange-400 rounded-full transition-all duration-500"
+                  className="h-full bg-orange-400 rounded-full transition-all duration-500 shadow-sm"
                   style={{ width: `${livePct}%` }}
                 />
               </div>
@@ -392,11 +413,11 @@ export default function PrayerTimesPage() {
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2 px-1">
             <h3 className={HS}>Daily Schedule</h3>
-            <span className={`${LS} text-gray-800 truncate`}>
-              {city} {off && ` • ${off}`}
+            <span className={`${LS} text-gray-600 font-semibold truncate`}>
+              {city} {off && `• ${off}`}
             </span>
           </div>
-          <div className="flex flex-col gap-1 sm:gap-1.5">
+          <div className="flex flex-col gap-2">
             {times.map((t, i) => {
               const name = PRAYERS[i];
               const isNext = nextE.i === i;
@@ -405,44 +426,50 @@ export default function PrayerTimesPage() {
               return (
                 <div
                   key={name}
-                  className={`flex items-center justify-between gap-3 p-3 sm:p-3.5 md:p-4 rounded-xl ${
-                    isNext ? 'bg-indigo-500 text-white shadow-md' : sun ? 'bg-indigo-100/75' : 'bg-white shadow-sm'
-                  } ${passed ? 'opacity-80' : ''}`}
+                  className={`flex items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl transition-all ${
+                    isNext
+                      ? 'bg-indigo-600 text-white shadow-md ring-2 ring-indigo-400/30'
+                      : sun
+                        ? 'bg-indigo-50/80 border border-indigo-100 text-gray-800'
+                        : 'bg-white shadow-sm border border-indigo-100/60 text-gray-800'
+                  } ${passed ? 'opacity-75' : ''}`}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0">
                     <div
-                      className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 shrink-0 rounded-full flex items-center justify-center ${
+                      className={`w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-xl flex items-center justify-center ${
                         isNext
                           ? 'bg-white/20 text-orange-400'
                           : sun
-                            ? 'bg-indigo-200 text-orange-800'
-                            : 'bg-indigo-100 text-gray-800'
+                            ? 'bg-indigo-200/70 text-orange-600'
+                            : 'bg-indigo-50 text-indigo-600'
                       }`}
                     >
                       <Icon name={META[i].icon} fill={isNext && i !== 4} />
                     </div>
                     <div className="flex flex-col min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className={`${HS} ${isNext ? 'font-bold' : ''}`}>{name}</span>
+                        <span className={`${HS} ${isNext ? 'font-bold text-white' : 'text-gray-900'}`}>{name}</span>
                         {isNext && (
-                          <span className={`${LS} px-2 py-0.5 rounded-full bg-orange-400 text-gray-800 uppercase`}>
+                          <span
+                            className={`${LS} px-2 py-0.5 rounded-full bg-orange-400 text-gray-900 font-bold uppercase`}
+                          >
                             Next
                           </span>
                         )}
                         {passed && (
-                          <span className="text-indigo-500">
+                          <span className="text-indigo-500 flex items-center">
                             <Icon name="check" className="w-4 h-4" />
                           </span>
                         )}
                       </div>
-                      <span className={`${LS} font-semibold ${isNext ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <span className={`${LS} font-medium ${isNext ? 'text-indigo-200' : 'text-gray-500'}`}>
                         {META[i].sub}
                       </span>
                     </div>
                   </div>
                   <span
                     className={`${HS} tabular-nums whitespace-nowrap shrink-0 ${
-                      isNext ? 'text-orange-400 font-bold' : sun ? 'text-gray-700' : ''
+                      isNext ? 'text-orange-300 font-bold' : sun ? 'text-gray-700' : 'text-gray-800'
                     }`}
                   >
                     {fmtTime(t, settings.tz)}
@@ -457,30 +484,32 @@ export default function PrayerTimesPage() {
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2 px-1">
             <h3 className={HS}>Calculation Settings</h3>
-            <span className={`${LS} text-gray-800`}>Method &amp; Asr</span>
+            <span className={`${LS} text-gray-600`}>Method &amp; Asr</span>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-300/30 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-sm border border-indigo-100 overflow-hidden">
             <details className="group">
-              <summary className="flex items-center justify-between gap-2 p-3.5 sm:p-4 cursor-pointer list-none select-none">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-500">
+              <summary className="flex items-center justify-between gap-2 p-3.5 sm:p-4 cursor-pointer list-none select-none hover:bg-indigo-50/40 transition-colors">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 shrink-0 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
                     <Icon name="sliders" />
                   </div>
                   <div className="min-w-0">
                     <h4 className={HS}>Calculation Parameters</h4>
-                    <p className={`${LS} text-gray-700 truncate`}>
+                    <p className={`${LS} text-gray-500 font-medium truncate`}>
                       {SHORT[settings.method]} • {settings.hanafi ? 'Hanafi' : "Shafi'i Standard"}
                     </p>
                   </div>
                 </div>
-                <span className="text-gray-700 transition-transform duration-200 group-open:rotate-180 shrink-0">
+                <span className="text-indigo-500 transition-transform duration-200 group-open:rotate-180 shrink-0">
                   <Icon name="chevron" className="w-[22px] h-[22px]" />
                 </span>
               </summary>
-              <div className="px-3.5 sm:px-4 pb-4 pt-3 border-t border-indigo-200 flex flex-col gap-4">
+
+              {/* Dropdown Content */}
+              <div className="px-3.5 sm:px-4 pb-4 pt-3 border-t border-indigo-100 flex flex-col gap-4 bg-white">
                 <label className="flex flex-col gap-1.5">
-                  <span className={`flex flex-wrap justify-between gap-x-2 ${LS}`}>
-                    Calculation Method <span className="text-gray-700">Angles: {angles}</span>
+                  <span className={`flex flex-wrap justify-between gap-x-2 ${LS} text-gray-700`}>
+                    Calculation Method <span className="text-indigo-600 font-semibold">Angles: {angles}</span>
                   </span>
                   <select
                     className={SELECT}
@@ -494,10 +523,13 @@ export default function PrayerTimesPage() {
                     ))}
                   </select>
                 </label>
+
                 <label className="flex flex-col gap-1.5">
-                  <span className={`flex flex-wrap justify-between gap-x-2 ${LS}`}>
+                  <span className={`flex flex-wrap justify-between gap-x-2 ${LS} text-gray-700`}>
                     Asr Juristic Method{' '}
-                    <span className="text-gray-700">{settings.hanafi ? 'Double Shadow' : 'Single Shadow'}</span>
+                    <span className="text-indigo-600 font-semibold">
+                      {settings.hanafi ? 'Double Shadow' : 'Single Shadow'}
+                    </span>
                   </span>
                   <select
                     className={SELECT}
@@ -508,8 +540,76 @@ export default function PrayerTimesPage() {
                     <option value="1">Hanafi</option>
                   </select>
                 </label>
-                <p className="flex items-start gap-1.5 bg-indigo-100/75 p-2.5 rounded-lg text-gray-800">
-                  <span className="text-indigo-500 mt-0.5 shrink-0">
+
+                {/* Traveler Prayer Offsets Section */}
+                <div className="flex flex-col gap-2 pt-2 border-t border-indigo-100">
+                  <div className="flex items-center justify-between">
+                    <span className={`${HS} text-gray-800`}>Traveler Prayer Offsets (min)</span>
+                    {settings.offsets && settings.offsets.some(o => o !== 0) && (
+                      <button
+                        onClick={() => update({ offsets: [0, 0, 0, 0, 0, 0] })}
+                        className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline"
+                      >
+                        Reset
+                      </button>
+                    )}
+                  </div>
+                  <p className={`${LS} text-gray-500 font-medium`}>
+                    Fine-tune individual prayer times to match your local mosque or travel conditions.
+                  </p>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-1">
+                    {PRAYERS.map((prayerName, idx) => {
+                      const currentOffset = settings.offsets?.[idx] || 0;
+                      return (
+                        <div
+                          key={prayerName}
+                          className="flex flex-col bg-indigo-50/50 p-2.5 rounded-xl border border-indigo-100"
+                        >
+                          <span className={`${LS} text-gray-800 font-bold mb-1.5 truncate`}>{prayerName}</span>
+                          <div className="flex items-center justify-between">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const nextOffsets = [...(settings.offsets || [0, 0, 0, 0, 0, 0])];
+                                nextOffsets[idx] = currentOffset - 1;
+                                update({ offsets: nextOffsets });
+                              }}
+                              className="w-7 h-7 bg-white rounded-lg shadow-sm border border-indigo-100 flex items-center justify-center font-bold text-gray-700 hover:bg-indigo-50 active:scale-95 transition-all"
+                            >
+                              -
+                            </button>
+                            <span
+                              className={`${BODY} font-bold tabular-nums ${
+                                currentOffset > 0
+                                  ? 'text-indigo-600'
+                                  : currentOffset < 0
+                                    ? 'text-orange-600'
+                                    : 'text-gray-600'
+                              }`}
+                            >
+                              {currentOffset > 0 ? `+${currentOffset}` : currentOffset}m
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const nextOffsets = [...(settings.offsets || [0, 0, 0, 0, 0, 0])];
+                                nextOffsets[idx] = currentOffset + 1;
+                                update({ offsets: nextOffsets });
+                              }}
+                              className="w-7 h-7 bg-white rounded-lg shadow-sm border border-indigo-100 flex items-center justify-center font-bold text-gray-700 hover:bg-indigo-50 active:scale-95 transition-all"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <p className="flex items-start gap-2 bg-indigo-50 p-3 rounded-xl text-indigo-900 border border-indigo-100/60 mt-1">
+                  <span className="text-indigo-600 mt-0.5 shrink-0">
                     <Icon name="info" className="w-[18px] h-[18px]" />
                   </span>
                   <span className={`${LS} font-semibold`}>
