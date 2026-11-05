@@ -1,10 +1,11 @@
-export type MethodKey = 'mwl' | 'isna' | 'egypt' | 'makkah' | 'karachi';
+export type MethodKey = 'mwl' | 'isna' | 'egypt' | 'makkah' | 'karachi' | 'diyanet';
 
-export interface CalculationMethod {
+export interface Method {
   name: string;
   fajr: number;
   isha?: number;
   ishaMin?: number;
+  adj?: number[];
 }
 
 export interface Settings {
@@ -16,6 +17,7 @@ export interface Settings {
   hanafi: boolean;
   set: boolean;
   auto: boolean;
+  offsets?: number[];
 }
 
 export interface City {
@@ -28,12 +30,18 @@ export interface City {
   timezone?: string;
 }
 
-export const METHODS: Record<MethodKey, CalculationMethod> = {
+export const METHODS: Record<MethodKey, Method> = {
   mwl: { name: 'Muslim World League', fajr: 18, isha: 17 },
   isna: { name: 'ISNA (North America)', fajr: 15, isha: 15 },
   egypt: { name: 'Egyptian Authority', fajr: 19.5, isha: 17.5 },
   makkah: { name: 'Umm al-Qura (Makkah)', fajr: 18.5, ishaMin: 90 },
   karachi: { name: 'Karachi', fajr: 18, isha: 18 },
+  diyanet: {
+    name: 'Diyanet / DİTİB (Turkish mosques)',
+    fajr: 18,
+    isha: 16,
+    adj: [-0.7, -7.7, 5, 4.6, 7.8, 0.7],
+  },
 };
 
 export const PRAYERS = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'] as const;
@@ -56,7 +64,8 @@ export function calcTimes(
   latDeg: number,
   lng: number,
   method: MethodKey,
-  hanafi: boolean
+  hanafi: boolean,
+  offsets?: number[]
 ): number[] {
   const base = Date.UTC(y, mo, dd);
   const D = base / 864e5 + 2440588 - 2451545;
@@ -68,22 +77,40 @@ export function calcTimes(
   const ra = (Math.atan2(Math.cos(e) * Math.sin(L), Math.cos(L)) / R / 15 + 24) % 24;
   let eq = q / 15 - ra;
   eq = ((((eq + 12) % 24) + 24) % 24) - 12;
+
   const lat = latDeg * R;
   const noon = 12 - lng / 15 - eq;
   const c = METHODS[method];
   const T = (a: number) =>
     Math.acos((-Math.sin(a * R) - Math.sin(lat) * Math.sin(dec)) / (Math.cos(lat) * Math.cos(dec))) / R / 15;
+
   const alt = Math.atan(1 / ((hanafi ? 2 : 1) + Math.tan(Math.abs(lat - dec)))) / R;
+  const sunrise = noon - T(0.833);
   const maghrib = noon + T(0.833);
-  const hours = [
-    noon - T(c.fajr),
-    noon - T(0.833),
-    noon,
-    noon + T(-alt),
-    maghrib,
-    c.ishaMin ? maghrib + c.ishaMin / 60 : noon + T(c.isha as number),
-  ];
-  return hours.map(h => base + h * 36e5);
+
+  let fajr = noon - T(c.fajr);
+  let isha = c.ishaMin ? maghrib + c.ishaMin / 60 : noon + T(c.isha as number);
+
+  // High-Latitude Fallback (One-Seventh of the Night)
+  if (Number.isNaN(fajr) || Number.isNaN(isha)) {
+    const daylight = maghrib - sunrise;
+    const nightLength = 24 - daylight;
+    if (Number.isNaN(fajr)) fajr = sunrise - nightLength / 7;
+    if (Number.isNaN(isha)) isha = c.ishaMin ? maghrib + c.ishaMin / 60 : maghrib + nightLength / 7;
+  }
+
+  const hours = [fajr, sunrise, noon, noon + T(-alt), maghrib, isha];
+
+  return hours.map((h, i) => {
+    if (Number.isNaN(h)) return NaN;
+
+    // Combine method institutional adjustment + user traveler offset
+    const methodAdj = c.adj ? c.adj[i] : 0;
+    const userOffset = offsets && typeof offsets[i] === 'number' ? offsets[i] : 0;
+    const totalAdj = methodAdj + userOffset;
+
+    return base + Math.round(h * 60 + totalAdj) * 6e4;
+  });
 }
 
 export const fmtTime = (t: number, tz?: string) =>

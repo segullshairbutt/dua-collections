@@ -1,7 +1,7 @@
 {
   "name": "Duas & Prayer Times",
   "short_name": "Duas",
-  "start_url": "/PrayerTimes",
+  "start_url": "/prayer-times",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
