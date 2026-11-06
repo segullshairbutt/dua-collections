@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import Link from 'next/link';
 
 import BackButton from '../BackButton';
+import { InstallButton } from '../PWAPrompt';
 import AppSwitcher from './AppSwitcher';
 
 interface NavHeadingProps {
@@ -23,6 +24,7 @@ const NavHeading: FC<NavHeadingProps> = ({ currentPath }) => {
             {appTitle}
           </h5>
         </Link>
+        {isPrayerTimes && <InstallButton />}
       </div>
 
       {/* Mobile App Switcher button */}

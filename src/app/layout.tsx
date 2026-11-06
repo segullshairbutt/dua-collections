@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import Footer from '@/components/Footer';
+import InstallPrompt from '@/components/PWAPrompt';
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 import { Navbar } from '@/components/navbar';
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className={inter.className}>
         <ServiceWorkerRegister />
+        <InstallPrompt />
         <Suspense fallback={<div className="text-center my-80"> Loading... </div>}>
           <Navbar />
           <div className="relative pt-16 pb-32 min-h-[calc(100vh_-_156px)]">{children}</div>
