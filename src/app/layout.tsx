@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <meta name="theme-color" content="#0f766e" />
+        <meta name="theme-color" content="#4f46e5" />
       </head>
       <body className={inter.className}>
         <ServiceWorkerRegister />
