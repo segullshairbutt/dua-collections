@@ -119,6 +119,7 @@ export const fmtTime = (t: number, tz?: string) =>
     : new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: tz || undefined });
 
 export const pad = (n: number) => String(n).padStart(2, '0');
+export const hm = (sec: number) => `${pad(Math.floor(sec / 3600))}h ${pad(Math.floor((sec % 3600) / 60))}m`;
 
 export async function reverseGeocode(lat: number, lng: number, signal?: AbortSignal): Promise<string | null> {
   try {

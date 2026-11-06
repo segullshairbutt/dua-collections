@@ -14,6 +14,7 @@ import {
   Settings,
   calcTimes,
   fmtTime,
+  hm,
   reverseGeocode,
   ymd,
 } from '@/lib/prayerTimes';
@@ -51,6 +52,45 @@ const META: readonly { readonly sub: string; readonly icon: IconName }[] = [
   { sub: 'Night prayer', icon: 'moon' },
 ];
 
+// A prayer is "current" from its start until: Fajr→Sunrise, Dhuhr→Asr, Asr→Maghrib, Maghrib→Isha, Isha→next Fajr.
+// Between Sunrise and Dhuhr no prayer is current.
+const WINDOW_PRAYERS = [0, 2, 3, 4, 5] as const;
+const END_IDX: Record<number, number> = { 0: 1, 2: 3, 3: 4, 4: 5 };
+const ENDS = ['Sunrise', '', 'Asr', 'Maghrib', 'Isha', 'Fajr'] as const;
+
+const HIJRI_MONTHS = [
+  'Muharram',
+  'Safar',
+  "Rabi' al-Awwal",
+  "Rabi' al-Thani",
+  'Jumada al-Awwal',
+  'Jumada al-Thani',
+  'Rajab',
+  "Sha'ban",
+  'Ramadan',
+  'Shawwal',
+  "Dhu al-Qi'dah",
+  'Dhu al-Hijjah',
+] as const;
+
+/** Reads numeric parts only: some phones return wrong month names/eras (e.g. "May 26, 1448 BC") for the Islamic calendar. */
+function hijriDate(ms: number, tz?: string): string {
+  try {
+    const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+      timeZone: tz,
+    }).formatToParts(ms);
+    const get = (type: string) => parseInt(parts.find(p => p.type === type)?.value || '', 10);
+    const d = get('day');
+    const m = get('month');
+    const y = get('year');
+    if (d >= 1 && d <= 30 && m >= 1 && m <= 12 && y > 1300 && y < 1600) return `${d} ${HIJRI_MONTHS[m - 1]} ${y} AH`;
+  } catch {}
+  return '';
+}
+
 const HS = 'text-[length:clamp(1rem,0.9rem_+_0.45vw,1.25rem)] leading-snug font-semibold';
 const LS = 'text-[length:clamp(0.65rem,0.6rem_+_0.25vw,0.8125rem)] leading-tight tracking-[0.04em] font-bold';
 const BODY = 'text-[length:clamp(0.8125rem,0.75rem_+_0.3vw,1rem)]';
@@ -76,6 +116,11 @@ export default function PrayerTimesPage() {
       }
       return next;
     });
+  }, []);
+
+  const handleTick = useCallback((n: number, _s: number, p: number) => {
+    setLiveNow(n);
+    setLivePct(p);
   }, []);
 
   // Auto-clear feedback after 7 seconds
@@ -115,7 +160,6 @@ export default function PrayerTimesPage() {
     };
   }, [searchQuery]);
 
-  // 1. Define handleGeoLocation first
   const handleGeoLocation = useCallback(() => {
     if (!navigator.geolocation) {
       setFeedback('Geolocation is not supported by your browser');
@@ -152,7 +196,6 @@ export default function PrayerTimesPage() {
     );
   }, [update]);
 
-  // 2. Reuse it inside the mount useEffect safely
   useEffect(() => {
     let saved: Settings | null = null;
     try {
@@ -171,7 +214,8 @@ export default function PrayerTimesPage() {
     }
   }, [handleGeoLocation]);
 
-  const day = useCallback(
+  // All six times (incl. Sunrise) for a day relative to today
+  const timesFor = useCallback(
     (offDays: number) =>
       calcTimes(
         ymd(liveNow + offDays * 864e5, settings.tz),
@@ -180,13 +224,22 @@ export default function PrayerTimesPage() {
         settings.method,
         settings.hanafi,
         settings.offsets
-      )
-        .map((t, i) => ({ i, t }))
-        .filter(e => e.i !== 1),
+      ),
     [liveNow, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi, settings.offsets]
   );
 
-  const seq = useMemo(() => [...day(-1), ...day(0), ...day(1)], [day]);
+  const times = useMemo(() => timesFor(0), [timesFor]);
+
+  // Yesterday + today + tomorrow without Sunrise: used to find the next prayer
+  const seq = useMemo(
+    () =>
+      [-1, 0, 1].flatMap(o =>
+        timesFor(o)
+          .map((t, i) => ({ i, t }))
+          .filter(e => e.i !== 1)
+      ),
+    [timesFor]
+  );
   const k = useMemo(
     () =>
       Math.max(
@@ -196,36 +249,23 @@ export default function PrayerTimesPage() {
     [seq, liveNow]
   );
   const nextE = seq[k] || seq[1];
-  const prevE = seq[k - 1] || seq[0];
 
-  const times = useMemo(
-    () =>
-      calcTimes(
-        ymd(liveNow, settings.tz),
-        settings.lat,
-        settings.lng,
-        settings.method,
-        settings.hanafi,
-        settings.offsets
-      ),
-    [liveNow, settings.tz, settings.lat, settings.lng, settings.method, settings.hanafi, settings.offsets]
-  );
+  // The prayer whose window we are inside right now (if any)
+  const cur = useMemo(() => {
+    const tomorrowFajr = timesFor(1)[0];
+    const windows = (
+      [
+        [timesFor(-1), times[0]],
+        [times, tomorrowFajr],
+      ] as [number[], number][]
+    ).flatMap(([t, nextFajr]) =>
+      WINDOW_PRAYERS.map(i => ({ i, start: t[i], end: i === 5 ? nextFajr : t[END_IDX[i]] }))
+    );
+    return windows.find(w => w.start <= liveNow && liveNow < w.end);
+  }, [timesFor, times, liveNow]);
 
   const tz = settings.tz || undefined;
-  const hijri = useMemo(() => {
-    try {
-      let h = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: tz,
-      }).format(liveNow);
-      if (!/AH/.test(h)) h += ' AH';
-      return h;
-    } catch {
-      return '';
-    }
-  }, [liveNow, tz]);
+  const hijri = useMemo(() => hijriDate(liveNow, tz), [liveNow, tz]);
 
   const off = useMemo(() => {
     try {
@@ -246,11 +286,20 @@ export default function PrayerTimesPage() {
     : `${c.fajr.toFixed(1)}° / ${(c.isha as number).toFixed(1)}°`;
   const col = 'flex flex-col gap-4 sm:gap-5 min-w-0';
 
+  // Hero: count down to the END of the current prayer window, or to the next prayer when none is current
+  const target = cur ? cur.end : nextE.t;
+  const from = cur ? cur.start : times[1];
+  const secLeft = Math.max(0, Math.round((target - liveNow) / 1000));
+  const endingSoon = !!cur && secLeft < 30 * 60;
+  const secNext = Math.max(0, Math.round((nextE.t - liveNow) / 1000));
+  const nextIsTomorrow = ymd(nextE.t, settings.tz)[2] !== ymd(liveNow, settings.tz)[2];
+  const startedYesterday = !!cur && ymd(cur.start, settings.tz)[2] !== ymd(liveNow, settings.tz)[2];
+
   if (!ready) return <p className="text-center text-indigo-600 font-medium mt-24">Loading prayer times…</p>;
 
   return (
     <main
-      className={`${jakarta.className} w-full max-w-md sm:max-w-xl md:max-w-xl lg:max-w-5xl mx-auto px-4 sm:px-6 pt-4 lg:pt-8 grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-8 lg:items-start text-gray-900`}
+      className={`${jakarta.className} w-full max-w-md sm:max-w-xl md:max-w-xl lg:max-w-5xl mx-auto px-4 sm:px-6 grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-8 lg:items-start text-gray-900`}
     >
       <div className={col}>
         {/* Location Section */}
@@ -332,7 +381,7 @@ export default function PrayerTimesPage() {
           {feedback && <p className={`text-center ${LS} font-medium text-indigo-600`}>{feedback}</p>}
         </section>
 
-        {/* Hero Section */}
+        {/* Hero Section: current prayer window if one is active, otherwise the next prayer */}
         <section className="relative overflow-hidden bg-indigo-600 text-white rounded-2xl p-5 sm:p-6 shadow-lg flex flex-col gap-4">
           {/* Top Row: Date & Hijri & Badge */}
           <div className="flex items-start justify-between gap-3">
@@ -362,38 +411,49 @@ export default function PrayerTimesPage() {
 
           {/* Main Countdown & Active Info Card */}
           <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-white/10 flex flex-col gap-3">
-            {/* Label & Live Timer Row */}
-            <div className="flex items-center justify-between">
+            {/* State label & live timer */}
+            <div className="flex items-start justify-between gap-2">
               <span
                 className={`inline-flex items-center gap-2 ${LS} px-3 py-1 rounded-full bg-white/15 text-indigo-100 font-bold uppercase tracking-wider`}
               >
-                <span className="h-2 w-2 rounded-full bg-orange-400 animate-pulse" /> Next Prayer
+                <span className="h-2 w-2 rounded-full bg-orange-400 animate-pulse" />
+                {cur ? 'Prayer time now' : 'Fajr ended'}
               </span>
-              <div className="text-lg sm:text-xl font-bold text-orange-300 font-mono tracking-tight">
-                <CountdownTimer
-                  nextTime={nextE.t}
-                  prevTime={prevE.t}
-                  onTick={(n, _s, p) => {
-                    setLiveNow(n);
-                    setLivePct(p);
-                  }}
-                />
+              <CountdownTimer
+                nextTime={target}
+                prevTime={from}
+                badge={endingSoon ? 'Ending soon' : undefined}
+                caption={cur ? 'Time left' : `Until ${PRAYERS[nextE.i]}`}
+                urgent={endingSoon}
+                onTick={handleTick}
+              />
+            </div>
+
+            {/* Prayer name + the time that matters (end of window, or start of next prayer) */}
+            <div className="flex items-end justify-between gap-2 pt-1">
+              <div className="flex flex-col gap-1 min-w-0">
+                <span className={BIG}>{PRAYERS[cur ? cur.i : nextE.i]}</span>
+                <span className={`${LS} text-indigo-200 font-medium`}>
+                  {cur
+                    ? `Started ${fmtTime(cur.start, settings.tz)}${startedYesterday ? ' (yesterday)' : ''}`
+                    : 'Next prayer'}
+                </span>
+              </div>
+              <div className="text-right shrink-0">
+                <span className={`${LS} block text-indigo-200 font-medium`}>
+                  {cur ? `Until ${ENDS[cur.i]}` : nextIsTomorrow ? 'Starts tomorrow' : 'Starts at'}
+                </span>
+                <span className="text-xl sm:text-2xl font-bold text-orange-300 tabular-nums">
+                  {fmtTime(target, settings.tz)}
+                </span>
               </div>
             </div>
 
-            {/* Big Prayer Name & Time Display (Clean, single source of truth) */}
-            <div className="flex items-baseline justify-between gap-2 pt-1">
-              <span className={BIG}>{PRAYERS[nextE.i]}</span>
-              <span className="text-xl sm:text-2xl font-bold text-orange-300 tabular-nums">
-                {fmtTime(nextE.t, settings.tz)}
-              </span>
-            </div>
-
-            {/* Progress Bar & Contextual Range Flow */}
+            {/* Progress */}
             <div className="flex flex-col gap-1.5 pt-1">
-              <div className={`${LS} flex justify-between text-indigo-200 font-medium`}>
+              <div className={`${LS} flex justify-between gap-2 text-indigo-200 font-medium`}>
                 <span>
-                  {PRAYERS[prevE.i]} ({fmtTime(prevE.t, settings.tz)})
+                  {cur ? PRAYERS[cur.i] : 'Sunrise'} ({fmtTime(from, settings.tz)})
                 </span>
                 <span className="text-orange-300 font-bold">{livePct}% Elapsed</span>
               </div>
@@ -404,6 +464,19 @@ export default function PrayerTimesPage() {
                 />
               </div>
             </div>
+
+            {/* While a prayer is current, still show what comes next */}
+            {cur && (
+              <p
+                className={`${LS} flex flex-wrap justify-between gap-x-2 pt-3 border-t border-white/15 text-indigo-200 font-medium`}
+              >
+                <span>
+                  Next: <span className="text-white font-bold">{PRAYERS[nextE.i]}</span> {fmtTime(nextE.t, settings.tz)}
+                  {nextIsTomorrow ? ' (tomorrow)' : ''}
+                </span>
+                <span>in {hm(secNext)}</span>
+              </p>
+            )}
           </div>
         </section>
       </div>
@@ -420,56 +493,76 @@ export default function PrayerTimesPage() {
           <div className="flex flex-col gap-2">
             {times.map((t, i) => {
               const name = PRAYERS[i];
-              const isNext = nextE.i === i;
               const sun = i === 1;
-              const passed = !isNext && !sun && t <= liveNow;
+              const isCur = !!cur && cur.start === t;
+              const isNext = nextE.t === t && !isCur;
+              const passed = !isCur && !sun && t <= liveNow;
+              const isSunNow = sun && !cur && t <= liveNow; // between Sunrise and Dhuhr
+              const filled = isCur; // the solid row always means "this prayer is happening now"
               return (
                 <div
                   key={name}
                   className={`flex items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl transition-all ${
-                    isNext
+                    filled
                       ? 'bg-indigo-600 text-white shadow-md ring-2 ring-indigo-400/30'
-                      : sun
-                        ? 'bg-indigo-50/80 border border-indigo-100 text-gray-800'
-                        : 'bg-white shadow-sm border border-indigo-100/60 text-gray-800'
-                  } ${passed ? 'opacity-75' : ''}`}
+                      : isNext
+                        ? 'bg-white shadow-sm border border-indigo-100/60 ring-2 ring-indigo-400 text-gray-800'
+                        : isSunNow
+                          ? 'bg-indigo-100 border border-indigo-200 ring-2 ring-indigo-300 text-gray-800'
+                          : sun
+                            ? 'bg-indigo-50/80 border border-indigo-100 text-gray-800'
+                            : 'bg-white shadow-sm border border-indigo-100/60 text-gray-800'
+                  } ${passed ? 'opacity-60' : ''}`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
                       className={`w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-xl flex items-center justify-center ${
-                        isNext
+                        filled
                           ? 'bg-white/20 text-orange-400'
                           : sun
                             ? 'bg-indigo-200/70 text-orange-600'
                             : 'bg-indigo-50 text-indigo-600'
                       }`}
                     >
-                      <Icon name={META[i].icon} fill={isNext && i !== 4} />
+                      <Icon name={META[i].icon} fill={filled && i !== 4} />
                     </div>
                     <div className="flex flex-col min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className={`${HS} ${isNext ? 'font-bold text-white' : 'text-gray-900'}`}>{name}</span>
-                        {isNext && (
+                        <span className={`${HS} ${filled ? 'font-bold text-white' : 'text-gray-900'}`}>{name}</span>
+                        {isCur && (
                           <span
                             className={`${LS} px-2 py-0.5 rounded-full bg-orange-400 text-gray-900 font-bold uppercase`}
+                          >
+                            Now
+                          </span>
+                        )}
+                        {isSunNow && (
+                          <span
+                            className={`${LS} px-2 py-0.5 rounded-full bg-indigo-600 text-white font-bold uppercase`}
+                          >
+                            Now
+                          </span>
+                        )}
+                        {isNext && (
+                          <span
+                            className={`${LS} px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold uppercase`}
                           >
                             Next
                           </span>
                         )}
-                        {passed && (
-                          <span className="text-indigo-500 flex items-center">
-                            <Icon name="check" className="w-4 h-4" />
-                          </span>
-                        )}
                       </div>
-                      <span className={`${LS} font-medium ${isNext ? 'text-indigo-200' : 'text-gray-500'}`}>
-                        {META[i].sub}
+                      <span className={`${LS} font-medium ${filled ? 'text-indigo-200' : 'text-gray-500'}`}>
+                        {isCur && cur
+                          ? `Until ${ENDS[i]} ${fmtTime(cur.end, settings.tz)}`
+                          : isSunNow
+                            ? 'Fajr time has ended'
+                            : META[i].sub}
                       </span>
                     </div>
                   </div>
                   <span
                     className={`${HS} tabular-nums whitespace-nowrap shrink-0 ${
-                      isNext ? 'text-orange-300 font-bold' : sun ? 'text-gray-700' : 'text-gray-800'
+                      filled ? 'text-orange-300 font-bold' : sun ? 'text-gray-700' : 'text-gray-800'
                     }`}
                   >
                     {fmtTime(t, settings.tz)}
@@ -514,7 +607,11 @@ export default function PrayerTimesPage() {
                   <select
                     className={SELECT}
                     value={settings.method}
-                    onChange={e => update({ method: e.target.value as MethodKey })}
+                    onChange={e => {
+                      const method = e.target.value as MethodKey;
+                      // Diyanet publishes standard (single-shadow) Asr
+                      update(method === 'diyanet' ? { method, hanafi: false } : { method });
+                    }}
                   >
                     {Object.entries(METHODS).map(([key, v]) => (
                       <option key={key} value={key}>
