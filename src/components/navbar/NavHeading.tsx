@@ -24,7 +24,7 @@ const NavHeading: FC<NavHeadingProps> = ({ currentPath }) => {
             {appTitle}
           </h5>
         </Link>
-        {isPrayerTimes && <InstallButton />}
+        {isPrayerTimes && <InstallButton className="ml-2" />}
       </div>
 
       {/* Mobile App Switcher button */}

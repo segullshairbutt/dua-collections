@@ -265,9 +265,22 @@ export function InstallButton({ className = '' }: { className?: string }) {
     <button
       type="button"
       onClick={openInstallDialog}
-      className={`rounded-full bg-orange-400 px-4 py-2 text-sm font-bold text-gray-900 shadow-sm transition hover:bg-orange-300 active:scale-95 ${className}`}
+      className={`inline-flex items-center gap-1 rounded-full bg-orange-400 px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm transition hover:bg-orange-300 active:scale-95 ${className}`}
+      title="Install App"
     >
-      Install app
+      <svg
+        className="w-3.5 h-3.5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
+      </svg>
+      <span>Install</span>
     </button>
   );
 }
